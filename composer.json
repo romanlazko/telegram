@@ -23,7 +23,7 @@
         "psr-4": {
             "Romanlazko\\Telegram\\": "src/",
             "Romanlazko\\Telegram\\App\\": "src/app/",
-            "Romanlazko\\Telegram\\Database\\Seeders\\": "database/seeders/"
+            "Romanlazko\\Telegram\\Database\\Seeders\\": "src/database/seeders/"
         }
     }
 }
