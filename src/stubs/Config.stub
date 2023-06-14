@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Bots\!bot_username!;
+
+
+class Config
+{
+    public static function getConfig()
+    {
+        return [
+            'inline_data'       => [
+            ],
+            'admin_ids'         => [
+            ],
+        ];
+    }
+}

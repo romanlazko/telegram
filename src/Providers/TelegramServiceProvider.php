@@ -1,0 +1,43 @@
+<?php
+
+namespace Romanlazko\Telegram\Providers;
+
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\ServiceProvider;
+use Romanlazko\Telegram\App\Telegram;
+use Romanlazko\Telegram\Models\Bot;
+
+class TelegramServiceProvider extends ServiceProvider
+{
+    /**
+     * Register services.
+     */
+    public function register(): void
+    {
+        $this->app->bind(Telegram::class, function () {
+            $bot = auth()->user()->bot;
+
+            if (is_null($bot)) {
+                return null;
+            }
+
+            return new Telegram($bot->token);
+        });
+    }
+
+    /**
+     * Bootstrap services.
+     */
+    public function boot(): void
+    {
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'telegram');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+        Blade::componentNamespace('Romanlazko\\Telegram\\Views\\Components', 'telegram');
+
+        $this->publishes([
+            __DIR__.'/../resources/views' => resource_path('views/telegram'),
+        ]);
+    }
+}

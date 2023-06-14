@@ -1,0 +1,27 @@
+{
+    "name": "romanlazko/telegram",
+    "description": "Telegram for Laravel",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "romanlazko",
+            "email": "romanlazko@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Romanlazko\\Telegram\\Providers\\TelegramServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Romanlazko\\Telegram\\": "src"
+        }
+    }
+}
