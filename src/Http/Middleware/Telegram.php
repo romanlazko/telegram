@@ -2,9 +2,9 @@
 
 namespace Romanlazko\Telegram\Http\Middleware;
 
-use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
+use Romanlazko\Telegram\Providers\TelegramServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
 
 class Telegram
@@ -15,13 +15,13 @@ class Telegram
     public function handle(Request $request, Closure $next, string $bot_username): Response
     {
         if (is_null(auth()->user()->bot)) {
-            return redirect(RouteServiceProvider::HOME);
+            return redirect(TelegramServiceProvider::BOT);
         }
 
         if (auth()->user()->bot->username === $bot_username OR $bot_username === 'default') {
             return $next($request);
         }
 
-        return redirect(RouteServiceProvider::HOME);
+        return redirect(TelegramServiceProvider::BOT);
     }
 }

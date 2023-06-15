@@ -6,13 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
-use Romanlazko\Telegram\App\BotApi;
 use Romanlazko\Telegram\App\Config;
 use Romanlazko\Telegram\App\Telegram;
 use Romanlazko\Telegram\Exceptions\TelegramException;
 use Romanlazko\Telegram\Generators\BotDirectoryGenerator;
 use Romanlazko\Telegram\Models\Bot;
+use Romanlazko\Telegram\Providers\TelegramServiceProvider;
 
 class BotController extends Controller
 {
@@ -20,7 +19,7 @@ class BotController extends Controller
     {
         Auth::login($user);
 
-        return redirect('/dashboard');
+        return redirect(TelegramServiceProvider::BOT);
     }
     /**
      * Display a listing of the resource.
@@ -50,7 +49,7 @@ class BotController extends Controller
     public function create(?Telegram $telegram)
     {
         if ($telegram) {
-            return redirect()->route('bot.index');
+            redirect(TelegramServiceProvider::BOT);
         }
 
         return view('telegram::bot.create');
