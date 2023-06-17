@@ -4,9 +4,8 @@ namespace Romanlazko\Telegram\Traits;
 
 use Romanlazko\Telegram\Models\Bot;
 use Romanlazko\Telegram\Models\TelegramChat;
-use Romanlazko\Telegram\Models\UserHasBot;
 
-trait TelegramBot
+trait HasBot
 {
     public function bot()
     {

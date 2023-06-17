@@ -62,21 +62,6 @@ abstract class Command
         ]);
     }
 
-    public function handleMainAdminError(TelegramException $exception): ?Response
-    {
-        $text = [];
-
-        $text[] = "Description: ".$exception->getMessage();
-        $text[] = "Code: ".$exception->getCode();
-        $text[] = "Params: ".$exception->getParamsAsJson();
-        $text[] = "File: ".$exception->getFile()." -> ".$exception->getLine();
-
-        return BotApi::sendMessage([
-            'text'          => implode("\n\n", $text),
-            'chat_id'       => $this->bot->getMainAdmin(),
-        ]);
-    }
-
     protected function getConversation(int $user_id = null)
     {
         if ($this->conversation === null) {
@@ -84,26 +69,6 @@ abstract class Command
             $this->conversation = new Conversation($user_id);
         }
         return $this->conversation;
-    }
-
-    protected function getUserContact(string $parse_mode = 'Markdown', int $chat_id = null): string
-    {
-        if ($chat_id === null) {
-            $chat = $this->updates->getChat();
-        }else{
-            $chat = BotApi::getChat([
-                'chat_id' => $chat_id
-            ])->getResult();
-        }
-
-        if ($chat->getUsername()) {
-            return "@{$chat->getUsername()}";
-        } else {
-            if ($parse_mode === 'HTML') {
-                return "<a href='tg://user?id={$chat->getId()}'>{$chat->getFirstName()} {$chat->getLastName()}</a>";
-            }
-            return "[tg://user?id={$chat->getId()}]({$chat->getFirstName()} {$chat->getLastName()})";
-        }
     }
 
     public static function getTitle(string $lang = 'en'): string
