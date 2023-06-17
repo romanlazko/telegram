@@ -21,6 +21,4 @@ Route::middleware(['web', 'auth'])->group(function () {
     
         Route::resource('advertisement', AdvertisementController::class);
     });
-
-    
 });

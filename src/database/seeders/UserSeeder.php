@@ -3,7 +3,6 @@
 namespace Romanlazko\Telegram\Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -14,9 +13,9 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name' => 'Roman Lazko',
-            'email' => 'romanlazko@gmail.com',
-            'password' => bcrypt('zdraste123'),
+            'name' => 'Admin',
+            'email' => 'admin@admin.com',
+            'password' => bcrypt('admin'),
             'chat_id' => 544883527,
         ]);
     }

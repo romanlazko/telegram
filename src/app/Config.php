@@ -29,7 +29,9 @@ class Config
     public static function initialize(Telegram $telegram): void
     {
         $configsListClass  = "App\\Bots\\{$telegram->getBotChat()->getUsername()}\\Config";
-        if (class_exists($configsListClass)) {
+        $directoryPath = app_path("Bots/{$telegram->getBotChat()->getUsername()}");
+
+        if (file_exists($directoryPath) && class_exists($configsListClass)) {
             $external_config = $configsListClass::getConfig() ?? $configsListClass::$config;
             foreach (self::$config as $key => $value) {
                 if (array_key_exists($key, self::$config) AND array_key_exists($key, $external_config)) {

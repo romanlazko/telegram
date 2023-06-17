@@ -51,10 +51,10 @@ class MessageController extends Controller
                 'description' => "Message successfully sent"
             ]);
         }
-        catch (TelegramException $exception){
+        catch (TelegramException $e){
             return back()->with([
-                'ok' => $exception->getOk(), 
-                'description' => $exception->getMessage()
+                'ok' => false, 
+                'description' => $e->getMessage()
             ]);
         }
     }

@@ -1,0 +1,44 @@
+<?php 
+
+namespace App\Bots\!bot_username!\Commands\!auth_path!;
+
+use Romanlazko\Telegram\App\BotApi;
+use Romanlazko\Telegram\App\Commands\Command;
+use Romanlazko\Telegram\App\Entities\Response;
+use Romanlazko\Telegram\App\Entities\Update;
+
+class MenuCommand extends Command
+{
+    public static $command = '/menu';
+
+    public static $title = [
+        'ru' => '🏠 Главное меню',
+        'en' => '🏠 Menu'
+    ];
+
+    public static $usage = ['/menu', 'menu', 'Главное меню', 'Menu'];
+
+    protected $enabled = true;
+
+    public function execute(Update $updates): Response
+    {
+        $buttons = BotApi::inlineKeyboard([
+            [array(MenuCommand::getTitle('en'), MenuCommand::$command, '')],
+        ]);
+
+        $text = implode("\n", [
+            "Hi 👋",
+            "This is main menu"
+        ]);
+
+        $data = [
+            'text'          =>  $text,
+            'chat_id'       =>  $updates->getChat()->getId(),
+            'reply_markup'  =>  $buttons,
+            'parse_mode'    =>  'Markdown',
+            'message_id'    =>  $updates->getCallbackQuery()?->getMessage()->getMessageId(),
+        ];
+
+        return BotApi::returnInline($data);
+    }
+}

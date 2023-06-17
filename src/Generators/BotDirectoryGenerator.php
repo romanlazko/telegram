@@ -16,24 +16,26 @@ class BotDirectoryGenerator
         
         if (!File::exists($botDirectory)) {
             File::makeDirectory($botDirectory);
+            self::createSubDirectories($botDirectory);
+            self::createCommandsListFile($botDirectory, $botName);
+            self::createBotProviderFile($botDirectory, $botName);
+            self::createBotConfigFile($botDirectory, $botName);
+            self::createBotWebFile($botDirectory, $botName);
+            self::createBotCommands($botDirectory, $botName, "UserCommands");
+            self::createBotCommands($botDirectory, $botName, "AdminCommands");
         }
-        
-        self::createSubDirectories($botDirectory);
-        self::createCommandsListFile($botDirectory, $botName);
-        self::createBotProviderFile($botDirectory, $botName);
-        self::createBotConfigFile($botDirectory, $botName);
-        self::createBotWebFile($botDirectory, $botName);
     }
     
     private static function createSubDirectories($botDirectory)
     {
         $subDirectories = [
-            'Commands/DefaultCommands',
             'Commands/UserCommands',
             'Commands/AdminCommands',
             'database/migrations',
+            'database/seeders',
             'resources/views/components',
             'Http/Controllers',
+            'Http/Requests',
             'routes',
             'Providers',
             'Models',
@@ -99,6 +101,24 @@ class BotDirectoryGenerator
                 "!bot_username!" => $botName,
             ];
             StubGenerator::generateStubFile($stubFile, $destinationFile, $replacements);
+        }
+    }
+
+    private static function createBotCommands($botDirectory, $botName, $auth)
+    {
+        $destinationCommands = [
+            __DIR__.'/../stubs/StartCommand.stub' => $botDirectory . "/Commands/$auth/StartCommand.php",
+            __DIR__.'/../stubs/MenuCommand.stub' => $botDirectory . "/Commands/$auth/MenuCommand.php",
+        ];
+
+        foreach ($destinationCommands as $stubFile => $destinationFile) {
+            if (!File::exists($destinationFile)) {
+                $replacements = [
+                    "!bot_username!" => $botName,
+                    "!auth_path!" => $auth
+                ];
+                StubGenerator::generateStubFile($stubFile, $destinationFile, $replacements);
+            }
         }
     }
 }
