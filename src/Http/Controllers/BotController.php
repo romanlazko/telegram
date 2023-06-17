@@ -10,6 +10,7 @@ use Romanlazko\Telegram\App\Config;
 use Romanlazko\Telegram\App\Telegram;
 use Romanlazko\Telegram\Exceptions\TelegramException;
 use Romanlazko\Telegram\Generators\BotDirectoryGenerator;
+use Romanlazko\Telegram\Http\Requests\BotStoreRequest;
 use Romanlazko\Telegram\Models\Bot;
 use Romanlazko\Telegram\Providers\TelegramServiceProvider;
 
@@ -58,7 +59,7 @@ class BotController extends Controller
     // /**
     //  * Store a newly created resource in storage.
     //  */
-    public function store(Request $request)
+    public function store(BotStoreRequest $request)
     {
         try {
             $telegram = new Telegram($request->token);
@@ -75,8 +76,11 @@ class BotController extends Controller
                     'chat_id' => $request->chat_id
                 ]);
             
-                $bot = $request->user()->bot()->create([
+                $bot = (new Bot())->storeOrRestoreBot(
+                    $telegram->getBotChat()->getId(),
+                [
                     'id'            => $telegram->getBotChat()->getId(),
+                    'user_id'       => $user->id,
                     'first_name'    => $telegram->getBotChat()->getFirstName(),
                     'last_name'     => $telegram->getBotChat()->getLastName(),
                     'username'      => $telegram->getBotChat()->getUsername(),
@@ -92,10 +96,10 @@ class BotController extends Controller
                 'description' => $response->getDescription()
             ]);
         }
-        catch (TelegramException $response){
+        catch (TelegramException $e){
             return back()->with([
-                'ok' => $response->getOk(), 
-                'description' => $response->getMessage()
+                'ok' => false, 
+                'description' => $e->getMessage()
             ]);
         }
     }
@@ -115,10 +119,10 @@ class BotController extends Controller
                 'description' => "Success"
             ]);
         }
-        catch (TelegramException $response){
+        catch (TelegramException $e){
             return back()->with([
-                'ok' => $response->getOk(), 
-                'description' => $response->getMessage()
+                'ok' => false, 
+                'description' => $e->getMessage()
             ]);
         }
     }

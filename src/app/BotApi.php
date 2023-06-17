@@ -4,6 +4,8 @@ namespace Romanlazko\Telegram\App;
 use Romanlazko\Telegram\App\Entities\Response;
 use Romanlazko\Telegram\Exceptions\TelegramException;
 use Carbon\Carbon;
+use JsonException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class BotApi
@@ -482,6 +484,37 @@ class BotApi
             $params['reply_markup'] = json_encode(array("inline_keyboard" => $params['reply_markup']), JSON_UNESCAPED_UNICODE);
         }
 
+		$result = self::executeCurl($apiMethod, $params);
+
+		$response = Response::fromRequest(self::jsonValidate($result));
+
+		if (!$response->getOk()) {
+			throw new TelegramException($response->getDescription(), $response->getErrorCode(), $params);
+		}
+
+        self::saveResponse($apiMethod, $response);
+        
+        return $response;
+	}
+
+	static private function saveResponse(string $apiMethod, Response $response): void
+	{
+		$result = $response->getResult();
+
+		if ($result AND in_array($apiMethod, static::$actions_need_to_save)) {
+            if (is_array($result)) {
+                foreach ($result as $key => $message) {
+                    DB::insertMessageRequest($message);
+                }
+            }
+            else if ($result->getMessageId()) {
+                DB::insertMessageRequest($result);
+            }
+        }
+	}
+
+	static function setUpCurlOptions(string $apiMethod, array $params = [])
+	{
 		$options = static::$proxySettings + [
 			CURLOPT_URL => self::getUrl().'/'.$apiMethod,
 			CURLOPT_RETURNTRANSFER => true,
@@ -499,51 +532,32 @@ class BotApi
 			$options = static::$customCurlOptions + $options;
 		}
 
-		$response = Response::fromRequest(self::jsonValidate(self::executeCurl($options, $params)));
-
-        if ($result = $response->getResult() AND in_array($apiMethod, static::$actions_need_to_save)) {
-            if (is_array($result)) {
-                foreach ($result as $key => $message) {
-                    DB::insertMessageRequest($message);
-                }
-            }
-            else if ($result->getMessageId()) {
-                DB::insertMessageRequest($result);
-            }
-        }
-        
-        return $response;
+		return $options;
 	}
 
-	static function executeCurl(array $options, array $params)
+	static function executeCurl(string $apiMethod, array $params = []): string
 	{
-        $curl = curl_init();
+        $options = self::setUpCurlOptions($apiMethod, $params);
+
+		$curl = curl_init();
+
 		curl_setopt_array($curl, $options);
 
 		$result = curl_exec($curl);
-		self::curlValidate($curl, $result, $params);
+
 		if ($result === false) {
-			throw new TelegramException(curl_error($curl), curl_errno($curl), $options);
+			throw new TelegramException(curl_error($curl), curl_errno($curl), $params);
 		}
 
 		return $result;
 	}
 
-	static function curlValidate($curl, $response = null, $params = null): void
-	{
-		if (($httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE))
-			&& !in_array($httpCode, [self::DEFAULT_STATUS_CODE, self::NOT_MODIFIED_STATUS_CODE])
-		) {
-			throw new TelegramException($response, $httpCode, $params);
-		}
-	}
-
-	static function jsonValidate($jsonString, $asArray = true)
+	static function jsonValidate(string $jsonString, bool $asArray = true): array|object
 	{
 		$json = json_decode($jsonString, $asArray);
 
 		if (json_last_error() != JSON_ERROR_NONE) {
-			throw new TelegramException("Ошибка валидации JSON: {$jsonString}", json_last_error());
+			throw new JsonException("Ошибка валидации JSON: {$jsonString}", json_last_error());
 		}
 
 		return $json;
@@ -554,3 +568,24 @@ class BotApi
 		return self::URL_PREFIX.self::$telegram->token;
 	}
 }
+
+// static function curlValidate($curl, $result = null, $params = null): void
+// 	{
+// 		if (($httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE)) && !in_array($httpCode, [self::DEFAULT_STATUS_CODE, self::NOT_MODIFIED_STATUS_CODE]) ) {
+// 			throw new TelegramException('Ошибка', $httpCode, $params);
+// 		}
+// 	}
+
+	// static function executeCurl(array $options, array $params)
+	// {
+    //     $curl = curl_init();
+	// 	curl_setopt_array($curl, $options);
+
+	// 	$result = curl_exec($curl);
+	// 	self::curlValidate($curl, $result, $params);
+	// 	if ($result === false) {
+	// 		throw new HttpException(curl_errno($curl), curl_error($curl), null, $options);
+	// 	}
+
+	// 	return $result;
+	// }

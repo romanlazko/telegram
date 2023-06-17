@@ -37,4 +37,18 @@ class Bot extends Model
     {
         return $this->hasMany(TelegramLog::class, 'bot_id', 'id');
     }
+
+    public function storeOrRestoreBot($id, $data)
+    {
+        $bot = Bot::withTrashed()->find($id);
+
+        if ($bot && $bot->trashed()) {
+            $bot->restore();
+            $bot->update($data);
+        } else if(!$bot) {
+            $bot = $this->create($data);
+        }
+
+        return $bot;
+    }
 }
