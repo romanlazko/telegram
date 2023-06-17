@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class BotLinks extends Component
+class BotNavLinks extends Component
 {
     /**
      * Create a new component instance.
@@ -22,7 +22,7 @@ class BotLinks extends Component
     public function render(): View|Closure|string|null
     {
         if ($bot_username = auth()->user()->bot?->username) {
-            $componentName = $bot_username.'::components.links';
+            $componentName = $bot_username.'::components.nav-links';
     
             if (view()->exists($componentName)) {
                 return view($componentName);

@@ -141,4 +141,18 @@ class Chat extends BaseEntity
         }
         return $this->manager_id;
     }
+
+    public function getContact($parse_mode = 'Markdown')
+    {
+        if ($this->getUsername()) {
+            return "@{$this->getUsername()}";
+        } else {
+            $contactName = "{$this->getFirstName()} {$this->getLastName()}";
+
+            if ($parse_mode === 'HTML') {
+                return "<a href='tg://user?id={$this->getId()}'>{$contactName}</a>";
+            }
+            return "[tg://user?id={$this->getId()}]({$contactName})";
+        }
+    }
 }

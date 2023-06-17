@@ -9,26 +9,28 @@ use Romanlazko\Telegram\App\Entities\Update;
 
 class MenuCommand extends Command
 {
-    public static $command = '/menu';
+    public static $command = '/help';
 
     public static $title = [
-        'ru' => '🏠 Главное меню',
-        'en' => '🏠 Menu'
+        'ru' => '❓ Помощь',
+        'en' => '❓ Help'
     ];
 
-    public static $usage = ['/menu', 'menu', 'Главное меню', 'Menu'];
+    public static $usage = ['/help', 'help', 'Помощь', 'Help'];
 
     protected $enabled = true;
 
     public function execute(Update $updates): Response
     {
         $buttons = BotApi::inlineKeyboard([
-            [array(HelpCommand::getTitle('en'), HelpCommand::$command, '')],
+            [array(MenuCommand::getTitle('en'), MenuCommand::$command, '')],
         ]);
 
         $text = implode("\n", [
             "Hi 👋",
-            "This is the main menu!"
+            "Here is a list of available commands:"."\n",
+            "/menu - 🏠 Menu,",
+            "/start - 🏁 Start bot." 
         ]);
 
         $data = [

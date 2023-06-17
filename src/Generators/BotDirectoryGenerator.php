@@ -109,6 +109,7 @@ class BotDirectoryGenerator
         $destinationCommands = [
             __DIR__.'/../stubs/StartCommand.stub' => $botDirectory . "/Commands/$auth/StartCommand.php",
             __DIR__.'/../stubs/MenuCommand.stub' => $botDirectory . "/Commands/$auth/MenuCommand.php",
+            __DIR__.'/../stubs/HelpCommand.stub' => $botDirectory . "/Commands/$auth/HelpCommand.php",
         ];
 
         foreach ($destinationCommands as $stubFile => $destinationFile) {

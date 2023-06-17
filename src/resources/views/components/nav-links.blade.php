@@ -27,4 +27,4 @@
 <x-nav-link :href="route('advertisement.index')" :active="request()->routeIs('advertisement')">
     {{ __('Advertisement') }}
 </x-nav-link>
-<x-telegram::bot-links/>
+<x-telegram::bot-nav-links/>
