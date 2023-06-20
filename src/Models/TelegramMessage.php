@@ -26,4 +26,14 @@ class TelegramMessage extends Model
     {
         return $this->belongsTo(TelegramChat::class, 'chat', 'id');
     }
+
+    public function scopeSearch($query, $search)
+    {
+        $search = strtolower($search);
+        return $query->when($search, function($query) use($search) {
+            return $query->whereRaw('LOWER(text) LIKE ?', ['%' . $search . '%'])
+                ->orWhereRaw('LOWER(caption) LIKE ?', ['%' . $search . '%'])
+                ->orWhereRaw('LOWER(reply_markup) LIKE ?', ['%' . $search . '%']);
+        });
+    }
 }

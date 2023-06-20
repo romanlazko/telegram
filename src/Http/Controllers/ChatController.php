@@ -15,22 +15,13 @@ class ChatController extends Controller
      */
     public function index(Request $request, Telegram $telegram)
     {
-        $user = request()->user();
-
-        $chats = TelegramChat::where('bot_id', $telegram->getBotId())
+        $chats = TelegramChat::search($request->search)
+            ->where('bot_id', $telegram->getBotId())
             ->orderByDesc('updated_at')
-            ->when($request->has('search'), function ($query) use ($request) {
-                return $query->where(function ($query) use ($request) {
-                    $query->where('first_name', 'like', "%{$request->search}%")
-                        ->orWhere('last_name', 'like', "%{$request->search}%")
-                        ->orWhere('username', 'like', "%{$request->search}%");
-                });
-            })
-            ->with('messages')
             ->paginate(20);
 
         $chats_collection = $chats->map(function ($chat) use ($telegram) {
-            $last_message           = $chat->messages->last();
+            $last_message           = $chat->messages()->latest()->limit(1)->first();
             $chat->last_message     = Str::limit($last_message?->text ?? $last_message?->caption, 60);
             $chat->photo            = $telegram::getPhoto(['file_id' => $chat->photo]);
             return $chat;

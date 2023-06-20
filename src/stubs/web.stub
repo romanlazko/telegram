@@ -3,5 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['web', 'auth', 'telegram:!bot_username!'])->name('!bot_username!.')->group(function () {
-    
+    Route::get('/page', function(){
+        return view('!bot_username!::page');
+    })->name('page');
 });

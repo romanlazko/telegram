@@ -18,11 +18,7 @@ class MessageController extends Controller
         $chat->photo = $telegram::getPhoto(['file_id' => $chat->photo]);
         
         $messages = $chat->messages()
-            ->when($request->has('search'), function($query) use($request) {
-                return $query->where('text', 'like', "%{$request->search}%")
-                    ->orWhere('caption', 'like', "%{$request->search}%")
-                    ->orWhere('reply_markup', 'like', "%{$request->search}%");
-            })
+            ->search($request->search)
             ->orderBy('id', 'DESC')
             ->with(['user', 'callback_query', 'callback_query.user'])
             ->paginate(20);
@@ -42,10 +38,18 @@ class MessageController extends Controller
     public function store(Request $request, TelegramChat $chat, Telegram $telegram)
     {
         try {
+            if ($request->has('command')) {
+                $buttons = $telegram::inlineKeyboard([
+                    [array($request->command::getTitle('ru'), $request->command::$command, '')]
+                ]);
+            }
+
             $response = $telegram::sendMessage([
-                'text'      => $request->message,
-                'chat_id'   => $chat->chat_id,
+                'text'          => $request->message,
+                'chat_id'       => $chat->chat_id,
+                'reply_markup'  => $buttons ?? null
             ]);
+            
             return back()->with([
                 'ok' => $response->getOk(), 
                 'description' => "Message successfully sent"

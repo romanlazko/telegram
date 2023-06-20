@@ -20,13 +20,7 @@ Route::middleware(['api'])->prefix('api')->post('/telegram/{bot}', function (Bot
     try {
         (new Telegram($bot->token))->run();
     } 
-    catch (TelegramException $exception) {
+    catch (TelegramException|\Exception|\Throwable|\Error $exception) {
         TelegramLogDb::report($exception);
-    }
-    catch (\Throwable $t) {
-
-    }
-    catch (\Error $e) {
-        
     }
 });
