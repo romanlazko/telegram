@@ -1,3 +1,0 @@
-<x-nav-link :href="route('!bot_username!.announcement.index')" :active="request()->routeIs('announcement')">
-    {{ __('Announcements') }}
-</x-nav-link>

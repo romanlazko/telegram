@@ -26,8 +26,8 @@
                         @csrf
                         @method('post')
                             <div>
-                                <x-telegram::form.label for="name" :value="__('Name:')" />
-                                <x-telegram::form.input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name')" required autofocus autocomplete="name" />
+                                <x-telegram::form.label for="name" :value="__('Name:*')" />
+                                <x-telegram::form.input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name')" required autofocus autocomplete="name" placeholder="Write name. User invisible"/>
                                 <x-telegram::form.error class="mt-2" :messages="$errors->get('name')" />
                             </div>
 
@@ -38,20 +38,21 @@
                             </div>
 
                             <div>
-                                <x-telegram::form.label for="title" :value="__('Title')" />
-                                <x-telegram::form.input id="title" name="title" type="text" class="mt-1 block w-full" :value="old('title')" autocomplete="title" />
+                                <x-telegram::form.label for="title" :value="__('Title:*')" />
+                                <x-telegram::form.input id="title" name="title" type="text" class="mt-1 block w-full" :value="old('title')" required autocomplete="title" placeholder="Write title. User visible"/>
                                 <x-telegram::form.error class="mt-2" :messages="$errors->get('title')" />
                             </div>
                     
                             <div>
-                                <x-telegram::form.label for="description" :value="__('Description: In MARKDOWN format')" />
-                                <x-telegram::form.textarea id="description" name="description" type="text" class="mt-1 block w-full" :value="old('description')" autocomplete="description" />
+                                <x-telegram::form.label for="description" :value="__('Description:*')" />
+                                <x-telegram::form.textarea id="description" name="description" type="text" class="mt-1 block w-full" :value="old('description')" required autocomplete="description" rows="10" placeholder="Write description in MARKDOWN format. User visible"/>
                                 <x-telegram::form.error class="mt-2" :messages="$errors->get('description')" />
                             </div>
 
                             <div>
-                                <x-telegram::form.label for="command" :value="__('Command')" />
-                                <x-telegram::form.input id="command" name="command" type="text" class="mt-1 block w-full" :value="old('command')" autocomplete="command" />
+                                <x-telegram::form.label for="command" :value="__('Command:')" />
+                                <x-telegram::form.input id="command" name="command" type="text" class="mt-1 block w-full" :value="old('command')" autocomplete="command" list="bot_commands_list" placeholder="Write command"/>
+                                <x-telegram::bot-commands-list/>
                                 <x-telegram::form.error class="mt-2" :messages="$errors->get('command')" />
                             </div>
 

@@ -45,23 +45,72 @@
             </div>
         </x-telegram::white-block>
         
+        <h1 class="text-xl font-bold">Webhook info:</h1>
         <x-telegram::white-block>
-            <h1 class="text-xl font-bold">Webhook info:</h1>
             <div class="w-full">
                 @dump($bot->webhook)
             </div>
         </x-telegram::white-block>
+
+        <h1 class="text-xl font-bold">Commands:</h1>
         <x-telegram::white-block>
-            <h1 class="text-xl font-bold">Commands:</h1>
             <div class="w-full">
                 @dump($bot->all_commands_list)
             </div>
         </x-telegram::white-block>
+
+        <h1 class="text-xl font-bold">Config:</h1>
         <x-telegram::white-block>
-            <h1 class="text-xl font-bold">Commands:</h1>
             <div class="w-full">
                 @dump($bot->config)
             </div>
+        </x-telegram::white-block>
+
+        <h1 class="text-xl font-bold">Logs:</h1>
+        <x-telegram::white-block class="p-0">
+            <x-telegram::table.table>
+                <x-telegram::table.thead>
+                    <tr>
+                        <x-telegram::table.th>id</x-telegram::table.th>
+                        <x-telegram::table.th>Message</x-telegram::table.th>
+                        <x-telegram::table.th>Code</x-telegram::table.th>
+                        <x-telegram::table.th>Params</x-telegram::table.th>
+                        <x-telegram::table.th>Trace</x-telegram::table.th>
+                        <x-telegram::table.th>Created<br>Updated</x-telegram::table.th>
+                    </tr>
+                </x-telegram::table.thead>
+                <x-telegram::table.tbody>
+                    @forelse ($bot->logs as $index => $log)
+                        <tr class="@if($index % 2 === 0) bg-gray-100 @endif text-sm">
+                            <x-telegram::table.td>{{ $log->id }}</x-telegram::table.td>
+                            <x-telegram::table.td class="whitespace-nowrap">
+                                <p class="text-red-700">{{ $log->message }}</p>
+                                <p>{{ dirname(Str::after($log->file, 'public_html')) }}/<b>{{ basename($log->file) }}</b></p>
+                                <p class="text-blue-700 font-bold">{{ $log->line }}</p>
+                            </x-telegram::table.td>
+                            <x-telegram::table.td>{{ $log->code }}</x-telegram::table.td>
+                            <x-telegram::table.td>
+                                <pre>{{ json_encode(json_decode($log->params), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE); }}</pre>
+                            </x-telegram::table.td>
+                            <x-telegram::table.td class="whitespace-nowrap">
+                                <p onclick='alert({{ json_encode(str_replace("#", "\n#", $log->trace), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }})'>
+                                    {{ Str::limit($log->trace, 100, '...') }}
+                                </p>
+                                
+                            </x-telegram::table.td>
+                            <x-telegram::table.td class="text-xs">
+                                <p title="{{ $log->created_at->format('d.m.Y (H:i)') }}">
+                                    {{ $log->created_at->diffForHumans() }}
+                                </p>
+                                <p title="{{ $log->updated_at->format('d.m.Y (H:i)') }}">
+                                    {{ $log->updated_at->diffForHumans() }}
+                                </p>
+                            </x-telegram::table.td>
+                        </tr>
+                    @empty
+                    @endforelse
+                </x-telegram::table.tbody>
+            </x-telegram::table.table>
         </x-telegram::white-block>
     </x-slot>
 </x-telegram::layout>

@@ -4,7 +4,6 @@ namespace Romanlazko\Telegram\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Romanlazko\Telegram\App\Config;
 use Romanlazko\Telegram\App\Telegram;
@@ -38,7 +37,8 @@ class BotController extends Controller
             'photo'             => $telegram->getBotChat()->getPhotoLink(),
             'webhook'           => $telegram::getWebhookInfo()->getResult(),
             'all_commands_list' => $telegram->getAllCommandsList(),
-            'config'            => Config::$config
+            'config'            => Config::$config,
+            'logs'              => auth()->user()->bot->logs(),
         ];
 
         return view('telegram::bot.index', compact('bot'));

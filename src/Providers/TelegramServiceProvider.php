@@ -39,6 +39,7 @@ class TelegramServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'telegram');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');

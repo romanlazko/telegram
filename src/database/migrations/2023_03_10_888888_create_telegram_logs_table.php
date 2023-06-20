@@ -20,7 +20,7 @@ return new class extends Migration
             $table->index('bot_id', 'log_bot_idx');
             $table->foreign('bot_id', 'log_bot_fk')->on('bots')->references('id');
             
-            $table->text('description')->nullable();
+            $table->text('message')->nullable();
             $table->bigInteger('code')->nullable();
             $table->json('params')->nullable();
             $table->string('file')->nullable();

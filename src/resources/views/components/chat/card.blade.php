@@ -1,7 +1,7 @@
 <div class="flex items-center">
     <a href="{{ route('chat.show', $chat) }}">
         <div class="flex-col items-center my-auto">
-            <img src="{{ $chat->photo }}" alt="Avatar" class="mr-4 w-12 h-12 min-w-[48px] rounded-full">
+            <img src="{{ $chat->photo ?? null }}" alt="Avatar" class="mr-4 w-12 h-12 min-w-[48px] rounded-full">
         </div>
         <div class="flex-col justify-center">
             <div class="">

@@ -1,0 +1,3 @@
+<x-responsive-nav-link :href="route('!bot_username!.page')" :active="request()->routeIs('!bot_username!.page')">
+    {{ __('Bot page') }}
+</x-responsive-nav-link>

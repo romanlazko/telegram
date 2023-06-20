@@ -35,7 +35,7 @@ class Bot extends Model
 
     public function logs()
     {
-        return $this->hasMany(TelegramLog::class, 'bot_id', 'id');
+        return $this->hasMany(TelegramLog::class, 'bot_id', 'id')->latest()->get()->take(10);
     }
 
     public function storeOrRestoreBot($id, $data)

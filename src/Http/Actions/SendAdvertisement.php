@@ -9,12 +9,15 @@ class SendAdvertisement
 {
     public function __invoke(Telegram $telegram, Advertisement $advertisement, int $chat_id)
     {
-        if ($commandClass = $advertisement->command AND $advertisement->images()->count() == 0) {
-            if (class_exists($commandClass)) {
-                $buttons = $telegram::inlineKeyboard([
-                    [array($commandClass::getTitle('ru'), $commandClass::$command, '')],
-                ]);
+        if ($advertisement->images()->count() == 0) {
+            $commands = explode(',', $advertisement->command);
+
+            foreach ($commands as $commandClass) {
+                if (class_exists($commandClass)) {
+                    $buttons[] = [array($commandClass::getTitle('ru'), $commandClass::$command, '')];
+                }
             }
+            $buttons = $telegram::inlineKeyboard($buttons);
         }
 
         $text = implode("\n", [
