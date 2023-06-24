@@ -7,7 +7,7 @@ use Romanlazko\Telegram\App\Commands\Command;
 use Romanlazko\Telegram\App\Entities\Response;
 use Romanlazko\Telegram\App\Entities\Update;
 
-class MenuCommand extends Command
+class HelpCommand extends Command
 {
     public static $command = '/help';
 
