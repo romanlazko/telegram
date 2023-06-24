@@ -14,9 +14,9 @@
     </x-slot>
 
     <x-slot name="content">
-        @foreach (\App\Models\User::where('chat_id', Auth::user()->chat_id)->get() as $user)
-            <x-responsive-nav-link :href="route('switch-account', $user)" :active="true" class="w-full">
-                {{ $user->bot?->username ?? $user->name}}
+        @foreach (auth()->user()->bots()->get() as $bot)
+            <x-responsive-nav-link :href="route('switch-account', $bot)" :active="true" class="w-full">
+                {{ $bot->username }}
             </x-responsive-nav-link>
         @endforeach
     </x-slot>

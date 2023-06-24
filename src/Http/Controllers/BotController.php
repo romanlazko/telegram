@@ -15,9 +15,9 @@ use Romanlazko\Telegram\Providers\TelegramServiceProvider;
 
 class BotController extends Controller
 {
-    public function switch(User $user)
+    public function switch(Bot $bot)
     {
-        Auth::login($user);
+        session()->put('current_bot', $bot->id);
 
         return redirect(TelegramServiceProvider::BOT);
     }
@@ -38,7 +38,7 @@ class BotController extends Controller
             'webhook'           => $telegram::getWebhookInfo()->getResult(),
             'all_commands_list' => $telegram->getAllCommandsList(),
             'config'            => Config::$config,
-            'logs'              => auth()->user()->bot->logs(),
+            'logs'              => request()->user()->current()->logs(),
         ];
 
         return view('telegram::bot.index', compact('bot'));
@@ -47,12 +47,8 @@ class BotController extends Controller
     // /**
     //  * Show the form for creating a new resource.
     //  */
-    public function create(?Telegram $telegram)
+    public function create()
     {
-        if ($telegram) {
-            redirect(TelegramServiceProvider::BOT);
-        }
-
         return view('telegram::bot.create');
     }
 
@@ -76,9 +72,9 @@ class BotController extends Controller
                     'chat_id' => $request->chat_id
                 ]);
             
-                $bot = (new Bot())->storeOrRestoreBot(
-                    $telegram->getBotChat()->getId(),
-                [
+                $bot = $user->bots()->withTrashed()->updateOrCreate([
+                    'id'            => $telegram->getBotChat()->getId(),
+                ],[
                     'id'            => $telegram->getBotChat()->getId(),
                     'user_id'       => $user->id,
                     'first_name'    => $telegram->getBotChat()->getFirstName(),
@@ -86,9 +82,12 @@ class BotController extends Controller
                     'username'      => $telegram->getBotChat()->getUsername(),
                     'photo'         => $telegram->getBotChat()->getPhoto()?->getBigFileId(),
                     'token'         => $request->token,
+                    'deleted_at'    => null
                 ]);
 
                 BotDirectoryGenerator::createBotDirectories($bot->username);
+
+                session()->put('current_bot', $bot->id);
             }
             
             return redirect()->route('bot.index')->with([

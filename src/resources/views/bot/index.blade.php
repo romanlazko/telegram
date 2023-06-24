@@ -1,8 +1,15 @@
 <x-telegram::layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Bot') }}
-        </h2>
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Bot') }}
+            </h2>
+            <div class="flex-col">
+                <x-telegram::a-buttons.secondary href="{{ route('bot.create') }}" class="float-right">
+                    {{ __("✚Create bot") }}
+                </x-telegram::a-buttons.secondary>
+            </div>
+        </div>
     </x-slot>
 
     <x-slot name="main">

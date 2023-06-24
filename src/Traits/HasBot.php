@@ -7,9 +7,9 @@ use Romanlazko\Telegram\Models\TelegramChat;
 
 trait HasBot
 {
-    public function bot()
+    public function bots()
     {
-        return $this->hasOne(Bot::class);
+        return $this->hasMany(Bot::class);
     }
 
     public function chat()
@@ -25,5 +25,10 @@ trait HasBot
     public function managerChats()
     {
         return $this->hasMany(TelegramChat::class, 'manager_id', 'chat_id');
+    }
+
+    public function current()
+    {
+        return $this->bots()->find(session()->get('current_bot', null));
     }
 }
