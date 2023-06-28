@@ -2,7 +2,7 @@
     <x-slot name="trigger">
         <x-responsive-nav-link>
             <button class="inline-flex items-center ">
-                <div>{{ request()->user()->current()->username ??  __("Choose bot")}}</div>
+                <div>{{ request()->user()->bot?->username ??  __("Choose bot")}}</div>
 
                 <div class="ml-1">
                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -18,7 +18,7 @@
             <form action="{{ route('bot.switch', $bot) }}" method="post" id="{{ $bot->username }}">
                 @csrf
                 @method('POST')
-                <x-responsive-nav-link :active="request()->user()->current()?->id === $bot?->id" onclick="document.getElementById('{{ $bot->username }}').submit()">
+                <x-responsive-nav-link :active="request()->user()->bot?->id === $bot?->id" onclick="document.getElementById('{{ $bot?->username }}').submit()">
                     {{ $bot?->username }}
                 </x-responsive-nav-link>
             </form>

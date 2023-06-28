@@ -27,7 +27,7 @@ trait HasBot
         return $this->hasMany(TelegramChat::class, 'manager_id', 'chat_id');
     }
 
-    public function current()
+    public function getBotAttribute()
     {
         return $this->bots()->find(session()->get('current_bot', null));
     }
