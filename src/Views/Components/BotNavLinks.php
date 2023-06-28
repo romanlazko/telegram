@@ -21,7 +21,7 @@ class BotNavLinks extends Component
      */
     public function render(): View|Closure|string|null
     {
-        if ($bot_username = request()->user()->current()?->username) {
+        if ($bot_username = request()->user()->bot?->username) {
             $componentName = $bot_username.'::components.nav-links';
     
             if (view()->exists($componentName)) {
