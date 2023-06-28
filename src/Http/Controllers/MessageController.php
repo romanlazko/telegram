@@ -38,10 +38,17 @@ class MessageController extends Controller
     public function store(Request $request, TelegramChat $chat, Telegram $telegram)
     {
         try {
-            if ($request->has('command')) {
-                $buttons = $telegram::inlineKeyboard([
-                    [array($request->command::getTitle('ru'), $request->command::$command, '')]
-                ]);
+            $buttons = null;
+            
+            if ($request->has('command') AND $request->command) {
+                $commands = explode(',', $request->command);
+
+                foreach ($commands as $commandClass) {
+                    if (class_exists($commandClass)) {
+                        $buttons[] = [array($commandClass::getTitle('ru'), $commandClass::$command, '')];
+                    }
+                }
+                $buttons = $telegram::inlineKeyboard($buttons);
             }
 
             $response = $telegram::sendMessage([
