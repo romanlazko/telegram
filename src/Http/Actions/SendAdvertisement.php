@@ -11,7 +11,7 @@ class SendAdvertisement
     {
         $buttons = null;
         
-        if ($advertisement->images()->count() == 0) {
+        if ($advertisement->images()->count() == 0 AND $advertisement->command){
             $commands = explode(',', $advertisement->command);
 
             foreach ($commands as $commandClass) {
