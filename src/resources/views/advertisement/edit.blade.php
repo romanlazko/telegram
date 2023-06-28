@@ -80,7 +80,9 @@
                         <div>
                             <x-telegram::form.label for="command" :value="__('Command:')" />
                             <x-telegram::form.input id="command" name="command" type="text" class="mt-1 block w-full" :value="old('command', $advertisement->command)" autocomplete="command" list="bot_commands_list" placeholder="Write command"/>
-                            <x-telegram::bot-commands-list/>
+                            <datalist id="bot_commands_list">
+                                <x-telegram::bot-commands-list/>
+                            </datalist>
                             <x-telegram::form.error class="mt-2" :messages="$errors->get('command')" />
                         </div>
 
