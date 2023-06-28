@@ -6,13 +6,14 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use Romanlazko\Telegram\App\Telegram;
+use Romanlazko\Telegram\Models\TelegramChat;
 
 class BotCommandsList extends Component
 {
     /**
      * Create a new component instance.
      */
-    public function __construct(private Telegram $telegram, private string $auth)
+    public function __construct(private Telegram $telegram, private ?string $auth = null)
     {
         
     }
@@ -22,7 +23,11 @@ class BotCommandsList extends Component
      */
     public function render(): View|Closure|string|null
     {
-        $commandsList = $this->telegram->getAllCommandsList()[$this->auth ?? 'user'];
+        $commandsListClass  = $this->telegram->getCommandsListClass();
+
+        $commandsList = $commandsListClass::getCommandsList($this->auth);
+
+        $commands = [];
 
         foreach ($commandsList as $command) {
             $command = "\\".$command;

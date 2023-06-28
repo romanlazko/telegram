@@ -279,7 +279,6 @@ class DB
             'last_name'                                 => $chat->getLastName(),
             'is_forum'                                  => $chat->getIsForum(),
             'photo'                                     => $chat->getPhoto()?->getSmallFileId(),
-            'role'                                      => $chat->getRole() ?? ($chat->getType() === 'private' ? 'user' : $chat->getType()),
             'active_usernames'                          => $chat->getActiveUsernames() ? json_encode($chat->getActiveUsernames()) : NULL,
             'emoji_status_custom_emoji_id'              => $chat->getEmojiStatusCustomEmojiId(),
             'bio'                                       => $chat->getBio(),
@@ -457,7 +456,7 @@ class DB
 
     static public function getRole(?int $chat_id = null): ?string
     {
-        return self::getChat($chat_id)?->role;
+        return self::getChat($chat_id)->role;
     }
 
     /**
@@ -468,7 +467,7 @@ class DB
      * @throws TelegramException If the user is not found.
      */
 
-    static public function setRole(?int $chat_id = null, ?string $role = null): void
+    static public function setRole(?int $chat_id = null, ?string $role): void
     {
         self::getChat($chat_id)->update([
             'role' => $role
@@ -506,7 +505,7 @@ class DB
      * @throws TelegramException If the user is not found.
      */
 
-    static protected function getUser(?int $user_id = null): ?TelegramUser
+    static protected function getUser(?int $user_id = null): TelegramUser
     {
         $user = self::getBot()->users()->where('user_id', $user_id)->first();
         
@@ -517,8 +516,14 @@ class DB
         return $user;
     }
 
-    static public function getChat(?int $chat_id = null): ?TelegramChat
+    static public function getChat(?int $chat_id = null): TelegramChat
     {
-        return self::getBot()->chats()->where('chat_id', $chat_id)->first();
+        $chat = self::getBot()->chats()->where('chat_id', $chat_id)->first();
+
+        if (!$chat) {
+            throw new TelegramException("Chat: {$chat_id} not found");
+        }
+
+        return $chat;
     }
 }
