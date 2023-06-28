@@ -35,7 +35,7 @@
                 </div>
         
                 <div class="flex items-center gap-4">
-                    <x-telegram::buttons.primary>{{ __('Save') }}</x-telegram::buttons.primary>
+                    <x-telegram::buttons.primary>{{ __('Create') }}</x-telegram::buttons.primary>
                 </div>
             </form>
         </x-telegram::white-block>

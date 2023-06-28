@@ -3,7 +3,7 @@
         <x-slot name="trigger">
             <button class="inline-flex items-center py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                 <div>
-                    {{ request()->user()->current()?->username ?? __("+Create bot") }}
+                    {{ request()->user()->current()?->username ?? __("Choose bot") }}
                 </div>
 
                 <div class="ml-1">
@@ -16,12 +16,12 @@
 
         <x-slot name="content">
             @forelse (request()->user()->bots()->get() as $bot)
-                <form action="{{ route('switch-account', $bot) }}" method="post" id="{{ $bot->username }}">
+                <form action="{{ route('bot.switch', $bot) }}" method="post" id="{{ $bot->username }}">
                     @csrf
                     @method('POST')
-                    <x-dropdown-link :active="true" onclick="document.getElementById('{{ $bot->username }}').submit()">
+                    <x-responsive-nav-link :active="request()->user()->current()?->id === $bot?->id" onclick="document.getElementById('{{ $bot->username }}').submit()">
                         {{ $bot?->username }}
-                    </x-dropdown-link>
+                    </x-responsive-nav-link>
                 </form>
             @empty
                 <x-dropdown-link :active="true" :href="route('bot.create')">

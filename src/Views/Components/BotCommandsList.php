@@ -12,7 +12,7 @@ class BotCommandsList extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public Telegram $telegram)
+    public function __construct(private Telegram $telegram, private string $auth)
     {
         
     }
@@ -22,15 +22,15 @@ class BotCommandsList extends Component
      */
     public function render(): View|Closure|string|null
     {
-        $commandsList = $this->telegram->getAllCommandsList()['user'];
+        $commandsList = $this->telegram->getAllCommandsList()[$this->auth ?? 'user'];
 
         foreach ($commandsList as $command) {
             $command = "\\".$command;
-            if (class_exists($command) AND $title = $command::getTitle()) {
+            if (class_exists($command) AND $title = $command::getTitle('ru')) {
                 $commands[$command] = $title;
             }
         }
 
-        return view('telegram::components.message.commands-list', compact('commands'));
+        return view('telegram::components.commands-list', compact('commands'));
     }
 }

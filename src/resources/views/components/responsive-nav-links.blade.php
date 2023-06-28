@@ -1,8 +1,8 @@
 <x-dropdown align="left" width="w-full">
     <x-slot name="trigger">
         <x-responsive-nav-link>
-            <button class="inline-flex items-center py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                <div>{{ Auth::user()->bot?->username ??  __('Create bot')}}</div>
+            <button class="inline-flex items-center ">
+                <div>{{ request()->user()->current()->username ??  __("Choose bot")}}</div>
 
                 <div class="ml-1">
                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -14,11 +14,19 @@
     </x-slot>
 
     <x-slot name="content">
-        @foreach (auth()->user()->bots()->get() as $bot)
-            <x-responsive-nav-link :href="route('switch-account', $bot)" :active="true" class="w-full">
-                {{ $bot->username }}
-            </x-responsive-nav-link>
-        @endforeach
+        @forelse (request()->user()->bots()->get() as $bot)
+            <form action="{{ route('bot.switch', $bot) }}" method="post" id="{{ $bot->username }}">
+                @csrf
+                @method('POST')
+                <x-responsive-nav-link :active="request()->user()->current()?->id === $bot?->id" onclick="document.getElementById('{{ $bot->username }}').submit()">
+                    {{ $bot?->username }}
+                </x-responsive-nav-link>
+            </form>
+        @empty
+            <x-dropdown-link :active="route('bot.create')" :href="route('bot.create')">
+                {{ __("+Create bot") }}
+            </x-dropdown-link>
+        @endforelse
     </x-slot>
 </x-dropdown>
 

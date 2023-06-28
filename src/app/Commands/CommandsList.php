@@ -33,12 +33,22 @@ class CommandsList
             /** Send update like pretty string, in case the transmitted command is not on this list, return Update like string **/
             // DefaultCommands\SendResultCommand::class        => ['/default'],
         ],
+        'channel' => [
+            /** Send empty response, in case the transmitted command is not on this list, return empty Response **/
+            DefaultCommands\EmptyResponseCommand::class,
+            
+            /** Send text "It is default command", in case the transmitted command is not on this list, return Default text **/
+            // DefaultCommands\DefaultCommand::class           => ['/default'],
+
+            /** Send update like pretty string, in case the transmitted command is not on this list, return Update like string **/
+            // DefaultCommands\SendResultCommand::class        => ['/default'],
+        ],
         'default'   => [
             /** Send text "It is default command", in case the transmitted command is not on this list, return Default text **/
             // DefaultCommands\DefaultCommand::class           => ['/default'],
 
             /** Send update like pretty string, in case the transmitted command is not on this list, return Update like string **/
-            DefaultCommands\SendResultCommand::class,
+            // DefaultCommands\SendResultCommand::class,
 
             DefaultCommands\EmptyResponseCommand::class,
         ]

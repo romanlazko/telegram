@@ -8,7 +8,7 @@ use Romanlazko\Telegram\Http\Controllers\GetContactController;
 use Romanlazko\Telegram\Http\Controllers\MessageController;
 
 Route::middleware(['web', 'auth'])->group(function () {
-    Route::post('/switch/{bot}', [BotController::class, 'switch'])->name('switch-account');
+    Route::post('/switch/{bot}', [BotController::class, 'switch'])->name('bot.switch');
     Route::resource('bot', BotController::class);
 
     Route::middleware(['telegram:default'])->group(function () {
