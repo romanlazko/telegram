@@ -19,9 +19,9 @@ class AdvertisementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Telegram $telegram)
     {
-        $advertisements = Advertisement::all();
+        $advertisements = Advertisement::where('bot_id', $telegram->getBotId())->get();
 
         return view('telegram::advertisement.index', compact(
             'advertisements'
@@ -44,13 +44,14 @@ class AdvertisementController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(AdvertisementRequest $request)
+    public function store(AdvertisementRequest $request, Telegram $telegram)
     {
         $images = [];
 
-        $advertisement = Advertisement::create(
-            Arr::except($request->validated(), ['images'])
-        );
+        $advertisement = Advertisement::create([
+            'bot_id' => $telegram->getBotId(),
+            ...Arr::except($request->validated(), ['images'])
+        ]);
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
@@ -76,6 +77,8 @@ class AdvertisementController extends Controller
     public function show(Advertisement $advertisement, Telegram $telegram, SendAdvertisement $sendAdvertisement)
     {
         $admins = $telegram->getAdmins();
+
+        $response = null;
 
         foreach ($admins as $admin) {
             try {

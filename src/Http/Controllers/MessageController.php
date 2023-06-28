@@ -40,15 +40,15 @@ class MessageController extends Controller
         try {
             $buttons = null;
             
-            if ($request->has('command') AND $request->command) {
-                $commands = explode(',', $request->command);
-
-                foreach ($commands as $commandClass) {
+            if ($request->has('commands') AND !empty($request->commands)) {
+                foreach ($request->commands as $commandClass) {
                     if (class_exists($commandClass)) {
                         $buttons[] = [array($commandClass::getTitle('ru'), $commandClass::$command, '')];
                     }
                 }
-                $buttons = $telegram::inlineKeyboard($buttons);
+                if (!empty($buttons)) {
+                    $buttons = $telegram::inlineKeyboard($buttons);
+                }
             }
 
             $response = $telegram::sendMessage([
