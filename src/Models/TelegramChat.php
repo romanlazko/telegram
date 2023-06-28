@@ -31,6 +31,11 @@ class TelegramChat extends Model
                     ->orWhereRaw('LOWER(last_name) LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('LOWER(username) LIKE ?', ['%' . $search . '%'])
                     ->orWhereRaw('LOWER(chat_id) LIKE ?', ['%' . $search . '%']);
+            })
+            ->orWhereHas('messages', function ($query) use ($search) {
+                $query->whereRaw('LOWER(text) LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('LOWER(caption) LIKE ?', ['%' . $search . '%'])
+                    ->orWhereRaw('LOWER(reply_markup) LIKE ?', ['%' . $search . '%']);
             });
         });
     }

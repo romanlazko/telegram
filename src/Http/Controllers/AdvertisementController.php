@@ -75,7 +75,7 @@ class AdvertisementController extends Controller
      */
     public function show(Advertisement $advertisement, Telegram $telegram, SendAdvertisement $sendAdvertisement)
     {
-        $admins = User::pluck('chat_id');
+        $admins = $telegram->getAdmins();
 
         foreach ($admins as $admin) {
             try {

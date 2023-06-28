@@ -3,13 +3,14 @@
 namespace Romanlazko\Telegram\App;
 
 use Romanlazko\Telegram\Exceptions\TelegramException;
+use Romanlazko\Telegram\Models\TelegramLog;
 
 class TelegramLogDb extends DB
 {
-    public static function report(TelegramException|\Exception|\Throwable|\Error $exception)
+    public static function report(int $bot_id, TelegramException|\Exception|\Throwable|\Error $exception)
     {
         if (self::shouldReport($exception)) {
-            self::logToDatabase($exception);
+            self::logToDatabase($bot_id, $exception);
         }
     }
 
@@ -34,9 +35,10 @@ class TelegramLogDb extends DB
         return false;
     }
 
-    protected static function logToDatabase(TelegramException|\Exception|\Throwable|\Error $exception)
+    protected static function logToDatabase(int $bot_id, TelegramException|\Exception|\Throwable|\Error $exception)
     {
-        self::getBot()->logs()->create([
+        TelegramLog::create([
+            'bot_id'        => $bot_id,
             'message'       => $exception->getMessage(),
             'code'          => $exception->getCode(),
             'params'        => method_exists($exception, 'getParamsAsJson') ? $exception->getParamsAsJson() : null,

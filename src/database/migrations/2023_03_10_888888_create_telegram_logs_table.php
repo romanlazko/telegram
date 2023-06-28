@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('bot_id', 'log_bot_fk')->on('bots')->references('id');
             
             $table->text('message')->nullable();
-            $table->bigInteger('code')->nullable();
+            $table->string('code')->nullable();
             $table->json('params')->nullable();
             $table->string('file')->nullable();
             $table->bigInteger('line')->nullable();

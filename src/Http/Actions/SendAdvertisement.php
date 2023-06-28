@@ -9,6 +9,8 @@ class SendAdvertisement
 {
     public function __invoke(Telegram $telegram, Advertisement $advertisement, int $chat_id)
     {
+        $buttons = null;
+        
         if ($advertisement->images()->count() == 0) {
             $commands = explode(',', $advertisement->command);
 
