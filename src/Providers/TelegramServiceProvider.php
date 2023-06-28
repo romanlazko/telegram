@@ -23,7 +23,7 @@ class TelegramServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(Telegram::class, function () {
-            $bot = request()->user()->current();
+            $bot = request()->user()->bot;
 
             if (is_null($bot)) {
                 return null;

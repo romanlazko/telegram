@@ -14,11 +14,11 @@ class Telegram
      */
     public function handle(Request $request, Closure $next, string $bot_username): Response
     {
-        if (is_null($request->user()->current())) {
+        if (is_null($request->user()->bot)) {
             return redirect(TelegramServiceProvider::BOT);
         }
 
-        if ($request->user()->current()->username === $bot_username OR $bot_username === 'default') {
+        if ($request->user()->bot->username === $bot_username OR $bot_username === 'default') {
             return $next($request);
         }
 

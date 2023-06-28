@@ -17,10 +17,6 @@ class BotDirectoryGenerator
         if (!File::exists($botDirectory)) {
             File::makeDirectory($botDirectory);
             self::createSubDirectories($botDirectory);
-            // self::createCommandsListFile($botDirectory, $botName);
-            // self::createBotProviderFile($botDirectory, $botName);
-            // self::createBotConfigFile($botDirectory, $botName);
-            // self::createBotWebFile($botDirectory, $botName);
             self::createBotCommands($botDirectory, $botName, "UserCommands");
             self::createBotCommands($botDirectory, $botName, "AdminCommands");
             self::generateStubFiles($botDirectory, $botName);
@@ -50,60 +46,6 @@ class BotDirectoryGenerator
             }
         }
     }
-    
-    // private static function createCommandsListFile($botDirectory, $botName)
-    // {
-    //     $stubFile = __DIR__.'/../stubs/CommandsList.stub';
-    //     $destinationFile = $botDirectory . '/Commands/CommandsList.php';
-
-    //     if (!File::exists($destinationFile)) {
-    //         $replacements = [
-    //             "!bot_username!" => $botName,
-    //         ];
-    //         StubGenerator::generateStubFile($stubFile, $destinationFile, $replacements);
-    //     }
-    // }
-
-    // private static function createBotProviderFile($botDirectory, $botName)
-    // {
-    //     $stubFile = __DIR__.'/../stubs/BotProvider.stub';
-    //     $botClassName = str_replace(' ', '', ucwords(str_replace('_', ' ', $botName))). "Provider";
-    //     $destinationFile = $botDirectory . "/Providers/{$botClassName}.php";
-
-    //     if (!File::exists($destinationFile)) {
-    //         $replacements = [
-    //             "!bot_username!" => $botName,
-    //             "!bot_class_name!" => $botClassName
-    //         ];
-    //         StubGenerator::generateStubFile($stubFile, $destinationFile, $replacements);
-    //     }
-    // }
-
-    // private static function createBotConfigFile($botDirectory, $botName)
-    // {
-    //     $stubFile = __DIR__.'/../stubs/Config.stub';
-    //     $destinationFile = $botDirectory . "/Config.php";
-
-    //     if (!File::exists($destinationFile)) {
-    //         $replacements = [
-    //             "!bot_username!" => $botName,
-    //         ];
-    //         StubGenerator::generateStubFile($stubFile, $destinationFile, $replacements);
-    //     }
-    // }
-
-    // private static function createBotWebFile($botDirectory, $botName)
-    // {
-    //     $stubFile = __DIR__.'/../stubs/web.stub';
-    //     $destinationFile = $botDirectory . "/routes/web.php";
-
-    //     if (!File::exists($destinationFile)) {
-    //         $replacements = [
-    //             "!bot_username!" => $botName,
-    //         ];
-    //         StubGenerator::generateStubFile($stubFile, $destinationFile, $replacements);
-    //     }
-    // }
 
     private static function createBotCommands($botDirectory, $botName, $auth)
     {
@@ -128,7 +70,7 @@ class BotDirectoryGenerator
     {
         $botClassName = str_replace(' ', '', ucwords(str_replace('_', ' ', $botName))). "Provider";
 
-        $destinationCommands = [
+        $destinationFiles = [
             __DIR__.'/../stubs/CommandsList.stub'           => $botDirectory . "/Commands/CommandsList.php",
             __DIR__.'/../stubs/BotProvider.stub'            => $botDirectory . "/Providers/{$botClassName}.php",
             __DIR__.'/../stubs/Config.stub'                 => $botDirectory . "/Config.php",
@@ -138,7 +80,7 @@ class BotDirectoryGenerator
             __DIR__.'/../stubs/page.stub'                   => $botDirectory . "/resources/views/page.blade.php",
         ];
 
-        foreach ($destinationCommands as $stubFile => $destinationFile) {
+        foreach ($destinationFiles as $stubFile => $destinationFile) {
             if (!File::exists($destinationFile)) {
                 $replacements = [
                     "!bot_username!" => $botName,
