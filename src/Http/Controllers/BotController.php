@@ -38,7 +38,7 @@ class BotController extends Controller
             'webhook'           => $telegram::getWebhookInfo()->getResult(),
             'all_commands_list' => $telegram->getAllCommandsList(),
             'config'            => Config::$config,
-            'logs'              => request()->user()->current()->logs(),
+            'logs'              => request()->user()->bot?->logs(),
         ];
 
         return view('telegram::bot.index', compact('bot'));
