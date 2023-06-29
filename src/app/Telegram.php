@@ -13,9 +13,6 @@ class Telegram
     private const DEFAULT_AUTH      = 'default';
     private const MAIN_ADMIN_ID     = '544883527';
 
-    /** @var string */
-    public string $token;
-
     /** @var int */
     public int $botId;
 
@@ -34,7 +31,7 @@ class Telegram
      * 
      * @throws TelegramException If the token is invalid
      */
-    public  function __construct(string $token)
+    public  function __construct(public string $token)
     {
         preg_match('/^(\d+):.*$/', $token, $matches);
         
@@ -43,7 +40,6 @@ class Telegram
         }
 
         $this->botId = (int) $matches[1];
-        $this->token = $token;
 
         BotApi::initialize($this);
 

@@ -24,17 +24,12 @@ abstract class Command
 
     protected $enabled = false;
 
-    protected $bot;
-    
-    protected $updates;
-
     protected $conversation = null;
 
-    public function __construct(Telegram $bot, Update $updates)
-    {
-        $this->bot      = $bot;
-        $this->updates  = $updates;
-    }
+    public function __construct(
+        protected Telegram $bot, 
+        protected Update $updates
+    ){}
 
     public function preExecute()
     {
