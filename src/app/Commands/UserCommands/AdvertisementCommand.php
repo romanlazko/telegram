@@ -26,10 +26,8 @@ class AdvertisementCommand extends Command
             return BotApi::emptyResponse();
         }
 
-        $response = (new SendAdvertisement)($this->bot, $advertisement, $updates->getChat()->getId());
-
         $advertisement->increment('views');
 
-        return $response;
+        return (new SendAdvertisement)($this->bot, $advertisement, $updates->getChat()->getId());
     }
 }
