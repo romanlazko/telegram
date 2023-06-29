@@ -19,7 +19,7 @@ class AdvertisementCommand extends Command
     public function execute(Update $updates): Response
     {
         $advertisement  = Advertisement::where('is_active', '1')
-            ->orderBy('updated_at', 'asc')
+            ->orderByDesc('updated_at')
             ->first();
 
         if (is_null($advertisement)) {
@@ -28,9 +28,7 @@ class AdvertisementCommand extends Command
 
         $response = (new SendAdvertisement)($this->bot, $advertisement, $updates->getChat()->getId());
 
-        if ($response->getOk()) {
-            $advertisement->increment('views');
-        }
+        $advertisement->increment('views');
 
         return $response;
     }
