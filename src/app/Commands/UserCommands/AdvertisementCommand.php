@@ -19,7 +19,7 @@ class AdvertisementCommand extends Command
     public function execute(Update $updates): Response
     {
         $advertisement  = Advertisement::where('is_active', '1')
-            ->orderByDesc('updated_at')
+            ->orderByAsc('updated_at')
             ->first();
 
         if (is_null($advertisement)) {
