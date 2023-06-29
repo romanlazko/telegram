@@ -19,23 +19,14 @@ class Conversation
     public $notes;
 
     /**
-     * Telegram user id
-     *
-     * @var int
-     */
-    protected $user_id;
-
-    /**
      * Conversation constructor to initialize a new conversation
      *
      * @param int    $user_id
      *
      * @throws TelegramException
      */
-    public function __construct(int $user_id)
+    public function __construct(protected int $user_id)
     {
-        $this->user_id = $user_id;
-
         //Try to load an existing conversation if possible
         if (!$this->load()) {
             //A new conversation start

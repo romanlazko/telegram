@@ -13,7 +13,7 @@ class BotCommandsList extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(private Telegram $telegram, private ?string $auth = null)
+    public function __construct(private Telegram $telegram, private ?string $auth = 'user')
     {
         
     }
