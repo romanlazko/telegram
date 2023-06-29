@@ -39,4 +39,19 @@ class TelegramChat extends Model
             });
         });
     }
+
+    public function getAuthAttribute()
+    {
+        if ($this->type) {
+            if ($this->type === 'private') {
+                return $this->role ?? null;
+            }
+            
+            else if ($this->type === 'supergroup' OR $this->type === 'channel') {
+                return $this->type;
+            }
+        }
+
+        return null;
+    }
 }
