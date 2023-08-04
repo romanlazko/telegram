@@ -31,10 +31,14 @@
         </x-slot>
     </x-dropdown>
 </div>
-<x-nav-link :href="route('chat.index')" :active="request()->routeIs('chat')">
-    {{ __('Chats') }}
-</x-nav-link>
-<x-nav-link :href="route('advertisement.index')" :active="request()->routeIs('advertisement')">
-    {{ __('Advertisement') }}
-</x-nav-link>
+
+@if (auth()->user()->isAdmin())
+    <x-nav-link :href="route('chat.index')" :active="request()->routeIs('chat')">
+        {{ __('Chats') }}
+    </x-nav-link>
+    <x-nav-link :href="route('advertisement.index')" :active="request()->routeIs('advertisement')">
+        {{ __('Advertisement') }}
+    </x-nav-link>
+@endif
+
 <x-telegram::bot-nav-links/>
