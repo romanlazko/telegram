@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->after('email', function ($table) {
-                $table->unsignedBigInteger('chat_id')->nullable();
+                $table->unsignedBigInteger('telegram_chat_id')->nullable();
             });
         });
     }

@@ -6,13 +6,14 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use Romanlazko\Telegram\App\Telegram;
+use Romanlazko\Telegram\Models\TelegramChat;
 
-class BotNavLinks extends Component
+class ChatBlock extends Component
 {
     /**
      * Create a new component instance.
      */
-    public function __construct(private Telegram $telegram)
+    public function __construct(private TelegramChat $chat, private Telegram $telegram)
     {
         //
     }
@@ -22,14 +23,8 @@ class BotNavLinks extends Component
      */
     public function render(): View|Closure|string|null
     {
-        if ($bot_username = $this->telegram->getBotChat()->getUsername()) {
-            $componentName = $bot_username.'::components.nav-links';
-    
-            if (view()->exists($componentName)) {
-                return view($componentName);
-            }
-        }
-
-        return null;
+        $this->chat->photo = $this->telegram::getPhoto(['file_id' => $this->chat->photo]);
+        
+        return view('telegram::components.chat.card', ['chat' => $this->chat]);
     }
 }

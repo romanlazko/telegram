@@ -5,6 +5,7 @@ namespace Romanlazko\Telegram\Providers;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Romanlazko\Telegram\App\Telegram;
+use Romanlazko\Telegram\Models\Bot;
 
 class TelegramServiceProvider extends ServiceProvider
 {
@@ -22,8 +23,17 @@ class TelegramServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // $this->app->bind(Telegram::class, function () {
+        //     $bot = request()->user()->bot;
+
+        //     if (is_null($bot)) {
+        //         return null;
+        //     }
+
+        //     return new Telegram($bot->token);
+        // });
         $this->app->bind(Telegram::class, function () {
-            $bot = request()->user()->bot;
+            $bot = Bot::find(session()->get('current_bot', request()->bot));
 
             if (is_null($bot)) {
                 return null;

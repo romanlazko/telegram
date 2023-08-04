@@ -15,8 +15,6 @@ class MessageController extends Controller
      */
     public function index(TelegramChat $chat, Telegram $telegram, Request $request)
     {
-        $chat->photo = $telegram::getPhoto(['file_id' => $chat->photo]);
-        
         $messages = $chat->messages()
             ->search($request->search)
             ->orderBy('id', 'DESC')

@@ -1,6 +1,6 @@
 <x-telegram::layout>
     <x-slot name="header">
-        <x-telegram::chat.card :chat="$chat"/>
+        <x-telegram::chat-block :chat="$chat"/>
     </x-slot>
 
     <x-slot name="main">

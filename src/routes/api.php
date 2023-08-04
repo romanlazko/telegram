@@ -16,11 +16,11 @@ use Romanlazko\Telegram\Models\Bot;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::middleware(['api'])->prefix('api')->post('/telegram/{bot}', function (Bot $bot) {
+Route::middleware(['api'])->prefix('api')->post('/telegram/{bot}', function (Telegram $telegram) {
     try {
-        (new Telegram($bot->token))->run();
+        $telegram->run();
     } 
     catch (TelegramException|\Exception|\Throwable|\Error $exception) {
-        TelegramLogDb::report($bot->id, $exception);
+        TelegramLogDb::report($telegram->botId, $exception);
     }
 });

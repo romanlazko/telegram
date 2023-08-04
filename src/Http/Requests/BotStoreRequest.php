@@ -24,7 +24,7 @@ class BotStoreRequest extends FormRequest
         return [
             'url'   => 'required|url',
             'token' => 'required|regex:/[0-9]{1,}:\w*/',
-            'chat_id' => 'sometimes|integer',
+            'telegram_chat_id' => 'sometimes|integer',
         ];
     }
 }

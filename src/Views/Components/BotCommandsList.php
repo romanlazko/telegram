@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use Romanlazko\Telegram\App\Telegram;
-use Romanlazko\Telegram\Models\TelegramChat;
 
 class BotCommandsList extends Component
 {

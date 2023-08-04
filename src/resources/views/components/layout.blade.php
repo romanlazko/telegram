@@ -20,4 +20,6 @@
     @elseif (session('ok') === false)
         <x-telegram::notifications.small class="bg-red-500" :title="session('description')"/>
     @endif
+
+    @yield('script')
 </x-app-layout>

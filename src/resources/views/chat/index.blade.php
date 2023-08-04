@@ -27,7 +27,7 @@
                         <tr class="@if($index % 2 === 0) bg-gray-100 @endif text-sm">
                             <x-telegram::table.td>{{ $chat->id }}</x-telegram::table.td>
                             <x-telegram::table.td class="whitespace-nowrap">
-                                <x-telegram::chat.card :chat="$chat"/>
+                                <x-telegram::chat-block :chat="$chat"/>
                             </x-telegram::table.td>
                             <x-telegram::table.td>
                                 <x-telegram::badge color="green">
