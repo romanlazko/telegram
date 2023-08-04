@@ -29,7 +29,9 @@ abstract class Command
     public function __construct(
         protected Telegram $bot, 
         protected Update $updates
-    ){}
+    ){
+        app()->setLocale($updates->getFrom()->getLanguageCode());
+    }
 
     public function preExecute()
     {

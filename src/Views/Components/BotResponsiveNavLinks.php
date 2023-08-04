@@ -7,12 +7,12 @@ use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use Romanlazko\Telegram\App\Telegram;
 
-class BotNavLinks extends Component
+class BotResponsiveNavLinks extends Component
 {
     /**
      * Create a new component instance.
      */
-    public function __construct(private Telegram $telegram)
+    public function __construct(private ?Telegram $telegram)
     {
         //
     }
@@ -22,7 +22,7 @@ class BotNavLinks extends Component
      */
     public function render(): View|Closure|string|null
     {
-        if ($bot_username = $this->telegram->getBotChat()->getUsername()) {
+        if ($bot_username = $this->telegram?->getBotChat()?->getUsername()) {
             $componentName = $bot_username.'::components.responsive-nav-links';
     
             if (view()->exists($componentName)) {

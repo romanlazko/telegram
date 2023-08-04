@@ -4,7 +4,7 @@
             {{ $message->callback_query?->user?->first_name ?? $message->user?->first_name}} {{ $message->callback_query?->user?->last_name ?? $message->user?->last_name}} 
         </p>
         <p>
-            {{ $message->callback_query?->data ?? $message->text ?? $message->caption }}
+            {!! nl2br(e( $message->callback_query?->data ?? $message->text ?? $message->caption)) !!}
         </p>
         <small title="{{ $message->created_at->format('d.m.Y (H:i:s)') }}">
             {{ $message->created_at->diffForHumans() }}

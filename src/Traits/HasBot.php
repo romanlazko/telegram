@@ -29,6 +29,6 @@ trait HasBot
 
     public function getBotAttribute()
     {
-        return $this->bots()->find(session()->get('current_bot', null));
+        return Bot::find(session()->get('current_bot', null));
     }
 }
