@@ -141,6 +141,7 @@ class BotApi
 		'sendMessage',
         'sendMediaGroup',
 		'sendPhoto',
+		'sendLocation'
 	];
 
     static public function initialize(Telegram $telegram){

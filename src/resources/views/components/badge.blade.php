@@ -1,4 +1,4 @@
-@props(['tag', 'color' => "", 'trigger'])
+@props(['tag', 'color' => "", 'trigger', 'active' => false])
 
 @if ((isset($trigger) AND $trigger == true) OR !isset($trigger))
     @if ($active) 
