@@ -18,7 +18,7 @@ class AdvertisementCommand extends Command
 
     public function execute(Update $updates): Response
     {
-        $advertisement  = Advertisement::where('is_active', '1')
+        $advertisement  = Advertisement::where('is_active', '1')->where('bot_id', $this->bot->getBotId())
             ->orderBy('updated_at', 'asc')
             ->first();
 

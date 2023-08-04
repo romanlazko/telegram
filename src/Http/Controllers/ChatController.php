@@ -20,10 +20,9 @@ class ChatController extends Controller
             ->orderByDesc('updated_at')
             ->paginate(20);
 
-        $chats_collection = $chats->map(function ($chat) use ($telegram) {
+        $chats_collection = $chats->map(function ($chat) {
             $last_message           = $chat->messages()->latest()->limit(1)->first();
             $chat->last_message     = Str::limit($last_message?->text ?? $last_message?->caption, 60);
-            $chat->photo            = $telegram::getPhoto(['file_id' => $chat->photo]);
             return $chat;
         });
 
@@ -36,10 +35,8 @@ class ChatController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TelegramChat $chat, Telegram $telegram)
+    public function show(TelegramChat $chat)
     {
-        $chat->photo = $telegram::getPhoto(['file_id' => $chat->photo]);
-
         return view('telegram::chat.show', compact(
             'chat',
         ));

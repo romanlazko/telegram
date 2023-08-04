@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'admin@admin.com',
             'password' => bcrypt('admin'),
-            'chat_id' => 544883527,
+            'telegram_chat_id' => 544883527,
         ]);
     }
 }

@@ -23,9 +23,9 @@
                 </div>
 
                 <div>
-                    <x-telegram::form.label for="chat_id" :value="__('Owner (chat_id):')" />
-                    <x-telegram::form.input id="chat_id" name="chat_id" type="text" class="mt-1 block w-full" :value="old('chat_id', auth()->user()->chat_id)" required autocomplete="chat_id" />
-                    <x-telegram::form.error class="mt-2" :messages="$errors->get('chat_id')" />
+                    <x-telegram::form.label for="telegram_chat_id" :value="__('Owner (chat_id):')" />
+                    <x-telegram::form.input id="telegram_chat_id" name="telegram_chat_id" type="text" class="mt-1 block w-full" :value="old('telegram_chat_id', auth()->user()->telegram_chat_id)" required autocomplete="telegram_chat_id" />
+                    <x-telegram::form.error class="mt-2" :messages="$errors->get('telegram_chat_id')" />
                 </div>
         
                 <div>

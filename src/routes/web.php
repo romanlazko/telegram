@@ -9,16 +9,18 @@ use Romanlazko\Telegram\Http\Controllers\MessageController;
 
 Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/switch/{bot}', [BotController::class, 'switch'])->name('bot.switch');
-    Route::resource('bot', BotController::class);
 
-    Route::middleware(['telegram:default'])->group(function () {
-        Route::resource('chat', ChatController::class);
+    Route::middleware(['admin'])->group(function () {
+        Route::resource('bot', BotController::class);
+        Route::middleware(['telegram:default'])->group(function () {
+            Route::resource('chat', ChatController::class);
 
-        Route::prefix('chat/{chat}')->group(function(){
-            Route::get('/get-contact', GetContactController::class)->name('get-contact');
-            Route::resource('message', MessageController::class);
+            Route::prefix('chat/{chat}')->group(function(){
+                Route::get('/get-contact', GetContactController::class)->name('get-contact');
+                Route::resource('message', MessageController::class);
+            });
+        
+            Route::resource('advertisement', AdvertisementController::class);
         });
-    
-        Route::resource('advertisement', AdvertisementController::class);
     });
 });

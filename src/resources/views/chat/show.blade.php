@@ -1,6 +1,6 @@
 <x-telegram::layout>
     <x-slot name="header">
-        <x-telegram::chat.card :chat="$chat">
+        <x-telegram::chat-block :chat="$chat">
             <form method="POST" action="{{ route('chat.update', $chat->id) }}" class="m-0 mx-2">
                 @csrf
                 @method('PUT')

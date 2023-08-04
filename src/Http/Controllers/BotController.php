@@ -69,7 +69,7 @@ class BotController extends Controller
                 $user = $request->user();
 
                 $user->update([
-                    'chat_id' => $request->chat_id
+                    'telegram_chat_id' => $request->telegram_chat_id
                 ]);
             
                 $bot = $user->bots()->withTrashed()->updateOrCreate([
@@ -111,7 +111,7 @@ class BotController extends Controller
         try {
             $response = $telegram::sendMessage([
                 'text' => "It is Work",
-                'chat_id' => request()->user()->chat_id
+                'telegram_chat_id' => request()->user()->chat_id
             ]);
             return back()->with([
                 'ok' => $response->getOk(), 
