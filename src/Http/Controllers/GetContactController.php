@@ -24,7 +24,7 @@ class GetContactController extends Controller
     
             $telegram::sendMessage([
                 'text'          =>  $text,
-                'chat_id'       =>  auth()->user()->chat_id,
+                'chat_id'       =>  auth()->user()->telegram_chat_id,
                 'reply_markup'  =>  $buttons,
                 'parse_mode'    =>  'Markdown',
             ]);

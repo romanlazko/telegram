@@ -30,10 +30,13 @@
     </x-slot>
 </x-dropdown>
 
-<x-responsive-nav-link :href="route('chat.index')" :active="request()->routeIs('chat')">
-    {{ __('Chats') }}
-</x-responsive-nav-link>
-<x-responsive-nav-link :href="route('advertisement.index')" :active="request()->routeIs('advertisement')">
-    {{ __('Advertisement') }}
-</x-responsive-nav-link>
+@if (auth()->user()->isAdmin())
+    <x-responsive-nav-link :href="route('chat.index')" :active="request()->routeIs('chat')">
+        {{ __('Chats') }}
+    </x-responsive-nav-link>
+    <x-responsive-nav-link :href="route('advertisement.index')" :active="request()->routeIs('advertisement')">
+        {{ __('Advertisement') }}
+    </x-responsive-nav-link>
+@endif
+
 <x-telegram::bot-responsive-nav-links/>
