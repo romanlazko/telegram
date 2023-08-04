@@ -111,7 +111,7 @@ class BotController extends Controller
         try {
             $response = $telegram::sendMessage([
                 'text' => "It is Work",
-                'telegram_chat_id' => request()->user()->chat_id
+                'telegram_chat_id' => request()->user()->telegram_chat_id
             ]);
             return back()->with([
                 'ok' => $response->getOk(), 

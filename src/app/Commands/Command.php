@@ -71,7 +71,7 @@ abstract class Command
     public static function getTitle(string $lang = 'en'): string
     {
         if(property_exists(self::class, 'title') AND is_array(static::$title)){
-            return static::$title[$lang] ?? static::$title['en'];   
+            return static::$title[app()->getLocale() ?? static::$title[$lang]];   
         }
         return static::$title ?? '';
     }
