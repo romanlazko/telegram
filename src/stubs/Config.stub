@@ -10,6 +10,7 @@ class Config
         return [
             'inline_data'       => [
             ],
+            'lang'              => 'ru',
             'admin_ids'         => [
             ],
         ];

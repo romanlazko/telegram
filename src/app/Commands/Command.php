@@ -3,6 +3,7 @@
 namespace Romanlazko\Telegram\App\Commands;
 
 use Romanlazko\Telegram\App\BotApi;
+use Romanlazko\Telegram\App\Config;
 use Romanlazko\Telegram\App\Conversation;
 use Romanlazko\Telegram\App\Entities\Response;
 use Romanlazko\Telegram\App\Entities\Update;
@@ -30,7 +31,7 @@ abstract class Command
         protected Telegram $bot, 
         protected Update $updates
     ){
-        app()->setLocale($updates->getFrom()->getLanguageCode());
+        app()->setLocale(Config::get('lang') ?? $updates->getFrom()->getLanguageCode());
     }
 
     public function preExecute()
@@ -68,12 +69,12 @@ abstract class Command
         return $this->conversation;
     }
 
-    public static function getTitle(string $lang = 'en'): string
+    public static function getTitle(string $lang = null): string
     {
         if(property_exists(self::class, 'title') AND is_array(static::$title)){
-            return static::$title[app()->getLocale() ?? static::$title[$lang]];   
+            return static::$title[$lang ?? app()->getLocale()] ?? ucfirst(static::$command);   
         }
-        return static::$title ?? '';
+        return static::$title ?? ucfirst(static::$command);
     }
 
     
