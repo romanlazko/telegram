@@ -9,7 +9,7 @@ use Romanlazko\Telegram\App\Entities\Message;
 use Romanlazko\Telegram\App\Entities\Update;
 use Romanlazko\Telegram\App\Entities\User;
 use Romanlazko\Telegram\Exceptions\TelegramException;
-use Romanlazko\Telegram\Models\Bot;
+use Romanlazko\Telegram\Models\TelegramBot;
 use Romanlazko\Telegram\Models\TelegramCallbackQuery;
 use Romanlazko\Telegram\Models\TelegramChat;
 use Romanlazko\Telegram\Models\TelegramChatJoinRequest;
@@ -31,11 +31,11 @@ class DB
     /**
      * The Telegram instance to use when interacting with the database.
      * 
-     * @var Telegram
+     * @var Bot
      */
-    static $telegram;
+    static $bot;
 
-    static $bot = null;
+    static $telegram_bot = null;
 
     /**
      * Initializes the DB class with the provided Telegram instance.
@@ -45,56 +45,16 @@ class DB
      * @return void
      */
 
-    static public function initialize(Telegram $telegram): void
+    static public function initialize(Bot $bot): void
     {
-        self::$telegram = $telegram;
+        self::$bot = $bot;
     }
-
-    // static public function insertRequest(Update $update)
-    // {
-    //     if ($message = $update->getMessage()) {
-    //         $chat_id    = $message->getChat()->getId();
-    //         $message_id = self::insertMessageRequest($message);
-    //     // } elseif ($edited_message = $update->getEditedMessage()) {
-    //     //     $chat_id           = $edited_message->getChat()->getId();
-    //     //     $edited_message_id = self::insertEditedMessageRequest($edited_message);
-    //     // } 
-    //     // elseif (($channel_post = $update->getChannelPost()) && self::insertMessageRequest($channel_post)) {
-    //     //     $chat_id         = $channel_post->getChat()->getId();
-    //     //     $channel_post_id = $channel_post->getMessageId();
-    //     // } elseif (($edited_channel_post = $update->getEditedChannelPost()) && self::insertEditedMessageRequest($edited_channel_post)) {
-    //     //     $chat_id                = $edited_channel_post->getChat()->getId();
-    //     //     $edited_channel_post_id = (int) self::$pdo->lastInsertId();
-    //     // } elseif (($inline_query = $update->getInlineQuery()) && self::insertInlineQueryRequest($inline_query)) {
-    //     //     $inline_query_id = $inline_query->getId();
-    //     // } elseif (($chosen_inline_result = $update->getChosenInlineResult()) && self::insertChosenInlineResultRequest($chosen_inline_result)) {
-    //     //     $chosen_inline_result_id = self::$pdo->lastInsertId();
-    //     // } elseif (($callback_query = $update->getCallbackQuery()) && self::insertCallbackQueryRequest($callback_query)) {
-    //     //     $callback_query_id = $callback_query->getId();
-    //     // } elseif (($shipping_query = $update->getShippingQuery()) && self::insertShippingQueryRequest($shipping_query)) {
-    //     //     $shipping_query_id = $shipping_query->getId();
-    //     // } elseif (($pre_checkout_query = $update->getPreCheckoutQuery()) && self::insertPreCheckoutQueryRequest($pre_checkout_query)) {
-    //     //     $pre_checkout_query_id = $pre_checkout_query->getId();
-    //     // } elseif (($poll = $update->getPoll()) && self::insertPollRequest($poll)) {
-    //     //     $poll_id = $poll->getId();
-    //     // } elseif (($poll_answer = $update->getPollAnswer()) && self::insertPollAnswerRequest($poll_answer)) {
-    //     //     $poll_answer_poll_id = $poll_answer->getPollId();
-    //     // } elseif (($my_chat_member = $update->getMyChatMember()) && self::insertChatMemberUpdatedRequest($my_chat_member)) {
-    //     //     $my_chat_member_updated_id = self::$pdo->lastInsertId();
-    //     // } elseif (($chat_member = $update->getChatMember()) && self::insertChatMemberUpdatedRequest($chat_member)) {
-    //     //     $chat_member_updated_id = self::$pdo->lastInsertId();
-    //     // } elseif (($chat_join_request = $update->getChatJoinRequest()) && self::insertChatJoinRequestRequest($chat_join_request)) {
-    //     //     $chat_join_request_id = self::$pdo->lastInsertId();
-    //     } else {
-    //         return false;
-    //     }
-    // }
 
     static public function insertUpdate(Update $update)
     {
         $update = TelegramUpdate::create([
             'update_id'             => $update->getUpdateId(),
-            'bot_id'                => self::getBot()->id,
+            'telegram_bot_id'                => self::getBot()->id,
             'chat'                  => self::insertChatRequest($update->getChat()),
             'message'               => self::insertMessageRequest($update->getMessage()),
             'edited_message'        => self::insertMessageRequest($update->getEditedMessage()),
@@ -237,7 +197,7 @@ class DB
 
         $user = self::getBot()->users()->updateOrCreate([
             'user_id'   => $user->getId(),
-            'bot_id'    => self::getBot()->id,
+            'telegram_bot_id'    => self::getBot()->id,
         ],[
             'is_bot'                        => $user->getIsBot(),
             'first_name'                    => $user->getFirstName(),
@@ -270,7 +230,7 @@ class DB
         
         $chat = self::getBot()->chats()->updateOrCreate([
             'chat_id'   => $chat->getId(),
-            'bot_id'    => self::getBot()->id,
+            'telegram_bot_id'    => self::getBot()->id,
         ],[
             'type'                                      => $chat->getType(),
             'title'                                     => $chat->getTitle(),
@@ -484,17 +444,17 @@ class DB
     /**
      * Get the bot associated with the current Telegram instance.
      *
-     * @return Bot The bot associated with the current Telegram instance.
+     * @return TelegramBot The bot associated with the current Telegram instance.
      * @throws TelegramException If the bot is not found.
      */
     
-    static public function getBot(): Bot
+    static public function getBot(): ?TelegramBot
     {
-        if (is_null(static::$bot)) {
-            static::$bot = Bot::where('id', self::$telegram->getBotId())->first();
+        if (is_null(static::$telegram_bot)) {
+            static::$telegram_bot = TelegramBot::where('id', self::$bot->getBotId())->first();
         }
         
-        return static::$bot;
+        return static::$telegram_bot;
     }
 
     /**

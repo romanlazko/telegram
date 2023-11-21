@@ -110,7 +110,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class BotApi 
 {
 
-    static $telegram;
+    static $bot;
 
 	static $proxySettings = [];
 
@@ -144,8 +144,8 @@ class BotApi
 		'sendLocation'
 	];
 
-    static public function initialize(Telegram $telegram){
-        self::$telegram = $telegram;
+    static public function initialize(Bot $bot){
+        self::$bot = $bot;
     }
 
 	static function sendMessages($data): Response
@@ -174,7 +174,7 @@ class BotApi
 
     static function returnInline(array $data): ?Response
     {
-        if (self::$telegram->getUpdates()->getCallbackQuery()) {
+        if (self::$bot->getUpdates()->getCallbackQuery()) {
             return self::editMessageText($data);
         }
         return self::sendMessage($data);
@@ -208,7 +208,7 @@ class BotApi
 	{
 		try {
 			$file_path = self::getFile($data)->getResult()->getFilePath();
-			return "https://api.telegram.org/file/bot".self::$telegram->token."/{$file_path}";
+			return "https://api.telegram.org/file/bot".self::$bot->token."/{$file_path}";
 		}
 		catch (TelegramException $e){
 			return "https://via.placeholder.com/150";
@@ -281,7 +281,7 @@ class BotApi
 
     static public function inlineKeyboard(array $buttons, string $step = '', array $link = null): array
 	{
-        $inline_data = self::$telegram->getUpdates()->getInlineData()->asArray();
+        $inline_data = self::$bot->getUpdates()->getInlineData()->asArray();
 		$vertical_Buttons = [];
 		foreach ($buttons as $key => $vertical) {
 			$horizontal_Buttons = [];
@@ -317,7 +317,7 @@ class BotApi
 
     static public function inlineCheckbox(array $buttons, string $step = ''): array
 	{
-		$inline_data 		= self::$telegram->getUpdates()->getInlineData()->asArray();
+		$inline_data 		= self::$bot->getUpdates()->getInlineData()->asArray();
 		$inline_data_step 	= explode(':', $inline_data[$step]);
 				
 		if(in_array($inline_data['temp'], $inline_data_step)){
@@ -404,7 +404,7 @@ class BotApi
 
 	static public function MonthCounter(Carbon $month, string $button = 'callback_null')
 	{
-		$command 			= self::$telegram->getUpdates()->getCallbackQuery()?->getCommand();
+		$command 			= self::$bot->getUpdates()->getCallbackQuery()?->getCommand();
 		$previous_month 	= clone $month;
 		$next_month 		= clone $month;
 
@@ -419,7 +419,7 @@ class BotApi
 
 	static public function TimeCounter(Carbon $hour, string $button = 'callback_null')
 	{
-		$command 			= self::$telegram->getUpdates()->getCallbackQuery()?->getCommand();
+		$command 			= self::$bot->getUpdates()->getCallbackQuery()?->getCommand();
 		$previous_hour 		= clone $hour;
 		$next_hour 			= clone $hour;
 
@@ -435,7 +435,7 @@ class BotApi
 
 	static public function Counter(?string $count, string $button = 'callback_null', int $min_count = 0, int $max_count = 100)
 	{
-		$command 	= self::$telegram->getUpdates()->getCallbackQuery()?->getCommand();
+		$command 	= self::$bot->getUpdates()->getCallbackQuery()?->getCommand();
 		$count 		= $count ?? $min_count;
 
 		$counter = [
@@ -566,27 +566,6 @@ class BotApi
 
 	static function getUrl(): string
 	{
-		return self::URL_PREFIX.self::$telegram->token;
+		return self::URL_PREFIX.self::$bot->token;
 	}
 }
-
-// static function curlValidate($curl, $result = null, $params = null): void
-// 	{
-// 		if (($httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE)) && !in_array($httpCode, [self::DEFAULT_STATUS_CODE, self::NOT_MODIFIED_STATUS_CODE]) ) {
-// 			throw new TelegramException('Ошибка', $httpCode, $params);
-// 		}
-// 	}
-
-	// static function executeCurl(array $options, array $params)
-	// {
-    //     $curl = curl_init();
-	// 	curl_setopt_array($curl, $options);
-
-	// 	$result = curl_exec($curl);
-	// 	self::curlValidate($curl, $result, $params);
-	// 	if ($result === false) {
-	// 		throw new HttpException(curl_errno($curl), curl_error($curl), null, $options);
-	// 	}
-
-	// 	return $result;
-	// }
