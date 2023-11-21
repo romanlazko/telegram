@@ -2,6 +2,8 @@
 
 namespace Romanlazko\Telegram\Providers;
 
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Romanlazko\Telegram\App\Telegram;
