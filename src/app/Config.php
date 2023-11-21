@@ -21,15 +21,15 @@ class Config
     /**
      * Initializes the Config class by merging the default config with the bot-specific config, if available
      * 
-     * @param Telegram $telegram The Telegram instance
+     * @param Bot $bot The Telegram instance
      *
      * @return void
      */
 
-    public static function initialize(Telegram $telegram): void
+    public static function initialize(Bot $bot): void
     {
-        $configsListClass  = "App\\Bots\\{$telegram->getBotChat()->getUsername()}\\Config";
-        $directoryPath = app_path("Bots/{$telegram->getBotChat()->getUsername()}");
+        $configsListClass  = "App\\Bots\\{$bot->getBotChat()->getUsername()}\\Config";
+        $directoryPath = app_path("Bots/{$bot->getBotChat()->getUsername()}");
 
         if (file_exists($directoryPath) && class_exists($configsListClass)) {
             $external_config = $configsListClass::getConfig() ?? $configsListClass::$config;

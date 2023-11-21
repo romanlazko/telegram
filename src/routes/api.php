@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Romanlazko\Telegram\App\Telegram;
 use Romanlazko\Telegram\App\TelegramLogDb;
 use Romanlazko\Telegram\Exceptions\TelegramException;
-use Romanlazko\Telegram\Models\Bot;
+use Romanlazko\Telegram\Models\TelegramBot;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,11 +16,11 @@ use Romanlazko\Telegram\Models\Bot;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::middleware(['api'])->prefix('api')->post('/telegram/{bot}', function (Telegram $telegram) {
+Route::middleware(['api'])->prefix('api')->post('/telegram/{bot}', function (TelegramBot $bot) {
     try {
-        $telegram->run();
+        (new Telegram($bot->token))->run();
     } 
     catch (TelegramException|\Exception|\Throwable|\Error $exception) {
-        TelegramLogDb::report($telegram->botId, $exception);
+        TelegramLogDb::report($bot->id, $exception);
     }
 });

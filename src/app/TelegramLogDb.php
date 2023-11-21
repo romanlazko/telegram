@@ -38,7 +38,7 @@ class TelegramLogDb extends DB
     protected static function logToDatabase(int $bot_id, TelegramException|\Exception|\Throwable|\Error $exception)
     {
         TelegramLog::create([
-            'bot_id'        => $bot_id,
+            'telegram_bot_id'        => $bot_id,
             'message'       => $exception->getMessage(),
             'code'          => $exception->getCode(),
             'params'        => method_exists($exception, 'getParamsAsJson') ? $exception->getParamsAsJson() : null,

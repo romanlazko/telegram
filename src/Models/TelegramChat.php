@@ -12,6 +12,10 @@ class TelegramChat extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'settings' => 'object',
+    ];
+
     public function messages()
     {
         return $this->hasMany(TelegramMessage::class, 'chat', 'id');
@@ -19,7 +23,7 @@ class TelegramChat extends Model
 
     public function bot()
     {
-        return $this->belongsTo(Bot::class, 'bot_id', 'id');
+        return $this->belongsTo(Bot::class, 'telegram_bot_id', 'id');
     }
 
     public static function scopeSearch($query, $search)
