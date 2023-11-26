@@ -2,12 +2,12 @@
 
 namespace Romanlazko\Telegram\Http\Actions;
 
-use Romanlazko\Telegram\App\Telegram;
+use Romanlazko\Telegram\App\Bot;
 use Romanlazko\Telegram\Models\Advertisement;
 
 class SendAdvertisement 
 {
-    public function __invoke(Telegram $telegram, Advertisement $advertisement, int $chat_id)
+    public function __invoke(Bot $bot, Advertisement $advertisement, int $chat_id)
     {
         $buttons = null;
         
@@ -19,7 +19,7 @@ class SendAdvertisement
                     $buttons[] = [array($commandClass::getTitle('ru'), $commandClass::$command, '')];
                 }
             }
-            $buttons = $telegram::inlineKeyboard($buttons);
+            $buttons = $bot::inlineKeyboard($buttons);
         }
 
         $text = implode("\n", [
@@ -31,7 +31,7 @@ class SendAdvertisement
             return asset($image->url);
         })->take(9);
 
-        return $telegram::sendMessageWithMedia([
+        return $bot::sendMessageWithMedia([
             'text'                      => $text,
             'chat_id'                   => $chat_id,
             'media'                     => $images ?? null,
