@@ -79,7 +79,7 @@ class DB
             return NULL;
         }
 
-        $chat = self::$telegram::getChat([
+        $chat = self::$bot::getChat([
             'chat_id' => $message->getChat()->getId()
         ])->getResult();
 
