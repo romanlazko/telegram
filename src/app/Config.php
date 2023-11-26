@@ -28,8 +28,8 @@ class Config
 
     public static function initialize(Bot $bot): void
     {
-        $configsListClass  = "App\\Bots\\{$bot->getBotChat()->getUsername()}\\Config";
-        $directoryPath = app_path("Bots/{$bot->getBotChat()->getUsername()}");
+        $configsListClass  = "App\\Bots\\{$bot->getNamespace()}\\Config";
+        $directoryPath = app_path("Bots/{$bot->getNamespace()}");
 
         if (file_exists($directoryPath) && class_exists($configsListClass)) {
             $external_config = $configsListClass::getConfig() ?? $configsListClass::$config;

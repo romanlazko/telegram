@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Romanlazko\Telegram\App\Telegram;
+use Romanlazko\Telegram\App\Bot;
 use Romanlazko\Telegram\App\TelegramLogDb;
 use Romanlazko\Telegram\Exceptions\TelegramException;
 use Romanlazko\Telegram\Models\TelegramBot;
@@ -18,7 +18,7 @@ use Romanlazko\Telegram\Models\TelegramBot;
 */
 Route::middleware(['api'])->prefix('api')->post('/telegram/{bot}', function (TelegramBot $bot) {
     try {
-        (new Telegram($bot->token))->run();
+        (new Bot($bot->token))->run();
     } 
     catch (TelegramException|\Exception|\Throwable|\Error $exception) {
         TelegramLogDb::report($bot->id, $exception);
