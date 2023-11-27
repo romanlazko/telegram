@@ -7,7 +7,7 @@ use Romanlazko\Telegram\App\Config;
 use Romanlazko\Telegram\App\Conversation;
 use Romanlazko\Telegram\App\Entities\Response;
 use Romanlazko\Telegram\App\Entities\Update;
-use Romanlazko\Telegram\App\Telegram;
+use Romanlazko\Telegram\App\Bot;
 use Romanlazko\Telegram\Exceptions\TelegramException;
 use Romanlazko\Telegram\Exceptions\TelegramUserException;
 
@@ -28,7 +28,7 @@ abstract class Command
     protected $conversation = null;
 
     public function __construct(
-        protected Telegram $bot, 
+        protected Bot $bot, 
         protected Update $updates
     ){
         app()->setLocale(Config::get('lang') ?? $updates->getFrom()->getLanguageCode());
@@ -76,11 +76,4 @@ abstract class Command
         }
         return static::$title ?? ucfirst(static::$command);
     }
-
-    
-
-
-
-
-
 }
