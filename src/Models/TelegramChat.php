@@ -23,7 +23,7 @@ class TelegramChat extends Model
 
     public function bot()
     {
-        return $this->belongsTo(Bot::class, 'telegram_bot_id', 'id');
+        return $this->belongsTo(TelegramBot::class, 'telegram_bot_id', 'id');
     }
 
     public static function scopeSearch($query, $search)
