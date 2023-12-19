@@ -7,6 +7,7 @@ class CommandsList
     static protected $default_commands = [
         'admin'     => [
             DefaultCommands\DefaultCommand::class,
+            DefaultCommands\GetContactCommand::class,
         ],
         'user'      => [
             UserCommands\StartCommand::class,
