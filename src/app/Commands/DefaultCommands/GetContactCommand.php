@@ -12,13 +12,15 @@ class GetContactCommand extends Command
 {
     public static $command = 'get_contact';
 
-    public static $pattern = "/^(\/start\s)(contact)=(\d+)$/";
+    public static $title = '';
+
+    public static $pattern = "/^(\/start\s)(contact)-(\d+)$/";
 
     protected $enabled = true;
 
     public function execute(Update $updates): Response
     {
-        preg_match($this->pattern, $updates->getMessage()?->getCommand(), $matches);
+        preg_match(static::$pattern, $updates->getMessage()?->getCommand(), $matches);
 
         $buttons = BotApi::inlineKeyboardWithLink(
             array('text' => 'Контакт', 'url'  => "tg://user?id={$matches[3]}")
@@ -27,7 +29,7 @@ class GetContactCommand extends Command
         $chat = DB::getChat($matches[3]);
 
         $text = implode("\n", [
-            "*Контакт для связи*"."\n",
+            "*Контакт для связи:*"."\n",
             "Имя фамилия: *{$chat->first_name} {$chat->last_name}*"."\n",
             "Имя пользователя: *@{$chat->username}*",
         ]);

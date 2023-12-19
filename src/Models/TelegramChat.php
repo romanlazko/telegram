@@ -61,6 +61,6 @@ class TelegramChat extends Model
 
     public function getContactAttribute()
     {
-        return "https://t.me/{$this->username}" ?? "https://t.me/{$this->bot->username}?contact={$this->chat_id}";
+        return "https://t.me/" . ($this->username ?: $this->bot->username."?start=contact-{$this->chat_id}");
     }
 }
