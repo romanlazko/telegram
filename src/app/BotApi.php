@@ -336,10 +336,10 @@ class BotApi
 				
 				if($horizontal[2] != ''){
 					if(in_array($inline_data['temp'], $inline_data_step)){
-						$button_text .= hex2bin('E29C85');
+						$button_text = hex2bin('E29C85').$button_text;
 					}
 					else {
-						$button_text .= hex2bin('E29D8C');
+						$button_text = hex2bin('E29D8C').$button_text;
 					}
 				}
 				$inline_data[$step] 		= implode(':', $inline_data_step);
