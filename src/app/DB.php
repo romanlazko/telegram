@@ -48,6 +48,7 @@ class DB
     static public function initialize(Bot $bot): void
     {
         self::$bot = $bot;
+        self::$telegram_bot = null;
     }
 
     static public function insertUpdate(Update $update)
