@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Romanlazko\Telegram\App\Telegram;
+use Romanlazko\Telegram\Console\Commands\CreateTelegramBotCommand;
 use Romanlazko\Telegram\Models\Bot;
 
 class TelegramServiceProvider extends ServiceProvider
@@ -33,6 +34,12 @@ class TelegramServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                CreateTelegramBotCommand::class,
+            ]);
+        }
+
         $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
