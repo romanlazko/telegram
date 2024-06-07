@@ -14,7 +14,7 @@ class CreateTelegramBotCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'telegram:make {token}';
+    protected $signature = 'make:telegram {token}';
 
     /**
      * The console command description.
@@ -35,7 +35,7 @@ class CreateTelegramBotCommand extends Command
         ]);
 
         if ($response->getOk()) {
-            $telegram_bot = TelegramBot::create([
+            $telegram_bot = TelegramBot::updateOrCreate([
                 'id'            => $bot->getBotChat()->getId(),
                 'first_name'    => $bot->getBotChat()->getFirstName(),
                 'last_name'     => $bot->getBotChat()->getLastName(),
